@@ -3,22 +3,31 @@
   "version": "0.1.0",
   "summary": "cupshe_task_ios_pod.",
   "description": "iOS SDK for cupshe task system",
-  "homepage": "https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod",
+  "homepage": "https://github.com/sxzmail/cupshe_task_ios_pod",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "authors": {
-    "xiaozhong.shi@gmail.com": "xiaozhong.shi@gmail.com"
+    "sxzmail": "xiaozhong.shi@gmail.com"
   },
   "source": {
-    "git": "https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod.git",
+    "git": "https://github.com/sxzmail/cupshe_task_ios_pod.git",
     "tag": "0.1.0"
   },
   "platforms": {
     "ios": "11.0"
   },
   "source_files": "cupshe_task_ios_pod/Classes/**/*",
+  "resources": [
+    "cupshe_task_ios_pod/Assets/**/*",
+    "cupshe_task_ios_pod/Assets/*"
+  ],
+  "resource_bundles": {
+    "cupshe_task_ios_pod": [
+      "cupshe_task_ios_pod/Assets/*.*"
+    ]
+  },
   "public_header_files": "Pod/Classes/**/*.h",
   "swift_versions": "5.0",
   "dependencies": {
