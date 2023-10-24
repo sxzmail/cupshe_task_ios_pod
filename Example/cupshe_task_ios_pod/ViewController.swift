@@ -17,6 +17,7 @@ class ViewController: UIViewController {
         
         var sdk = TaskSDK(token:"",brand:"1",channel:"1",site:"1",terminal:"2", lang:"en-GB",activityId:"44F3DD326696447D260612C6BD37B5E7")
         sdk.setTaskEnvironment(env: TaskEnvironment.TEST)
+        sdk.showTaskList()
         
 //        TaskSDK(token: String, brand: <#T##String#>, channel: <#T##String#>, site: <#T##String#>, terminal: <#T##String#>, lang: <#T##String#>, activityId: <#T##String#>, uiContextHanlder: UIViewController)
     }
