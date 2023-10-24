@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "TaskSDK.h"
 
 FOUNDATION_EXPORT double cupshe_task_ios_podVersionNumber;
 FOUNDATION_EXPORT const unsigned char cupshe_task_ios_podVersionString[];

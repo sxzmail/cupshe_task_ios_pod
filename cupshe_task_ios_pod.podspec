@@ -28,18 +28,18 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '11.0'
 
-  s.source_files = 'cupshe_task_ios_pod/Classes/*'
+  s.source_files = 'cupshe_task_ios_pod/Classes/**/*'
   
   # s.resource_bundles = {
   #   'cupshe_task_ios_pod' => ['cupshe_task_ios_pod/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
+  s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
-  spec.swift_versions = "5.0"
-  spec.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
+  s.swift_versions = "5.0"
+  # s.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
 
-  spec.dependency "SwiftyJSON", "~> 5.0.1"
-  spec.dependency "Alamofire", "~> 5.8.0"
+  s.dependency "SwiftyJSON", "~> 5.0.1"
+  s.dependency "Alamofire", "~> 5.8.0"
 end

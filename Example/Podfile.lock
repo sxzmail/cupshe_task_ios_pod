@@ -1,16 +1,27 @@
 PODS:
-  - cupshe_task_ios_pod (0.1.0)
+  - Alamofire (5.8.0)
+  - cupshe_task_ios_pod (0.1.0):
+    - Alamofire (~> 5.8.0)
+    - SwiftyJSON (~> 5.0.1)
+  - SwiftyJSON (5.0.1)
 
 DEPENDENCIES:
   - cupshe_task_ios_pod (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   cupshe_task_ios_pod:
     :path: "../"
 
 SPEC CHECKSUMS:
-  cupshe_task_ios_pod: 6ea3fbb52093b78d638b7da113c42451a59356d8
+  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  cupshe_task_ios_pod: 4117e9d1ef0c66d55b2d6dd43dc07a4033f33186
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
 
-PODFILE CHECKSUM: 212a52bbf9ae8ab15f811c7e1eec424352af7edb
+PODFILE CHECKSUM: 282bd055823d5235f78202d1a7d6ea205df07867
 
 COCOAPODS: 1.12.1

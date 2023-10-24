@@ -1,8 +1,8 @@
 {
   "name": "cupshe_task_ios_pod",
   "version": "0.1.0",
-  "summary": "A short description of cupshe_task_ios_pod.",
-  "description": "TODO: Add long description of the pod here.",
+  "summary": "cupshe_task_ios_pod.",
+  "description": "iOS SDK for cupshe task system",
   "homepage": "https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod",
   "license": {
     "type": "MIT",
@@ -16,7 +16,18 @@
     "tag": "0.1.0"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0"
   },
-  "source_files": "cupshe_task_ios_pod/Classes/**/*"
+  "source_files": "cupshe_task_ios_pod/Classes/**/*",
+  "public_header_files": "Pod/Classes/**/*.h",
+  "swift_versions": "5.0",
+  "dependencies": {
+    "SwiftyJSON": [
+      "~> 5.0.1"
+    ],
+    "Alamofire": [
+      "~> 5.8.0"
+    ]
+  },
+  "swift_version": "5.0"
 }

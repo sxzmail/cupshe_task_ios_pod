@@ -1,6 +1,6 @@
 use_frameworks!
 
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'cupshe_task_ios_pod_Example' do
   pod 'cupshe_task_ios_pod', :path => '../'
