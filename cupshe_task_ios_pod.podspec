@@ -19,11 +19,11 @@ Pod::Spec.new do |s|
 
   s.description      = "iOS SDK for cupshe task system"
 
-  s.homepage         = 'https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod'
+  s.homepage         = 'https://github.com/sxzmail/cupshe_task_ios_pod'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'xiaozhong.shi@gmail.com' => 'xiaozhong.shi@gmail.com' }
-  s.source           = { :git => 'https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod.git', :tag => s.version.to_s }
+  s.author           = { 'sxzmail' => 'xiaozhong.shi@gmail.com' }
+  s.source           = { :git => 'https://github.com/sxzmail/cupshe_task_ios_pod.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '11.0'

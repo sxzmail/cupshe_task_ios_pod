@@ -27,3 +27,7 @@ xiaozhong.shi@gmail.com, xiaozhong.shi@gmail.com
 ## License
 
 cupshe_task_ios_pod is available under the MIT license. See the LICENSE file for more info.
+
+
+pod repo add cupshe_task_ios_pod.podspec https://github.com/sxzmail/cupshe_task_ios_pod.git
+
