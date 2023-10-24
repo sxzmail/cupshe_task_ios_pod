@@ -31,3 +31,4 @@ cupshe_task_ios_pod is available under the MIT license. See the LICENSE file for
 
 pod repo add cupshe_task_ios_pod.podspec https://github.com/sxzmail/cupshe_task_ios_pod.git
 
+pod repo push cupshe_task_ios_pod.podspec https://github.com/sxzmail/cupshe_task_ios_pod.git
