@@ -1,0 +1,22 @@
+{
+  "name": "cupshe_task_ios_pod",
+  "version": "0.1.0",
+  "summary": "A short description of cupshe_task_ios_pod.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "xiaozhong.shi@gmail.com": "xiaozhong.shi@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/xiaozhong.shi@gmail.com/cupshe_task_ios_pod.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "cupshe_task_ios_pod/Classes/**/*"
+}

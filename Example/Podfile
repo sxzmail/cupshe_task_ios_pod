@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'cupshe_task_ios_pod_Example' do
+  pod 'cupshe_task_ios_pod', :path => '../'
+
+  target 'cupshe_task_ios_pod_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

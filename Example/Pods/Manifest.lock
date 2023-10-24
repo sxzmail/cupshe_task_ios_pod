@@ -1,0 +1,16 @@
+PODS:
+  - cupshe_task_ios_pod (0.1.0)
+
+DEPENDENCIES:
+  - cupshe_task_ios_pod (from `../`)
+
+EXTERNAL SOURCES:
+  cupshe_task_ios_pod:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  cupshe_task_ios_pod: 6ea3fbb52093b78d638b7da113c42451a59356d8
+
+PODFILE CHECKSUM: 212a52bbf9ae8ab15f811c7e1eec424352af7edb
+
+COCOAPODS: 1.12.1
