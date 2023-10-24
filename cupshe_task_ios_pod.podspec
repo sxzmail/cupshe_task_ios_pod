@@ -30,6 +30,8 @@ Pod::Spec.new do |s|
 
   s.source_files = 'cupshe_task_ios_pod/Classes/**/*'
   
+  s.resources = ['cupshe_task_ios_pod/Assets/**/*', 'cupshe_task_ios_pod/Assets/*']
+  
   # s.resource_bundles = {
   #   'cupshe_task_ios_pod' => ['cupshe_task_ios_pod/Assets/*.png']
   # }
