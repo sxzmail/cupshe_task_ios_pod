@@ -49,6 +49,11 @@ class CountdownView : UIView{
     
     private var progressView: GradientProgressView?
     private var countDownLbl:SubclassedUIButton?
+    
+    private var boldPath:String?
+//    private var demiPath:String?
+//    private var mediumPath:String?
+//    private var regularPath:String?
 //
 //    private var task_desc_txt_color:UIColor = UIColor(red: CGFloat(102/255.0), green: CGFloat(102/255.0), blue: CGFloat(102/255.0), alpha: 1)
 
@@ -58,7 +63,11 @@ class CountdownView : UIView{
     override init(frame: CGRect){
         super.init(frame: frame)
         
-        fontManager.regCustomFont(for: CountdownView.self)
+//        fontManager.regCustomFont(for: CountdownView.self)
+        self.boldPath = fontManager.getBoldFontPath(for: CountdownView.self)
+//        self.demiPath = fontManager.getDemiFontPath(for: TaskListView.self)
+//        self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
+//        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
 
     public func showView(uiViewController: UIViewController,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment){
@@ -99,7 +108,11 @@ class CountdownView : UIView{
         
         countDownLbl = SubclassedUIButton(frame: CGRect(x: 0, y: (46-9) * widthPercent, width: 46 * widthPercent, height: 18 * heightPercent))
         countDownLbl!.tintColor = .white
-        countDownLbl!.titleLabel?.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 12 * heightPercent)
+//        countDownLbl!.titleLabel?.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 12 * heightPercent)
+        if self.boldPath != nil {
+            countDownLbl!.titleLabel?.font = UIFont.init(name: self.boldPath!, size: 12 * heightPercent)
+        }
+        
         countDownLbl!.setTitle(self.countDownSec >= 0 ? String(self.countDownSec)+"s" : LangConfig.lang[lang]!["get"], for: .normal)
 //        countDownLbl!.backgroundColor = taskInfo.canExcute ? taskBtn_normal_color : taskBtn_finish_color
         if self.taskPageViewData!.targetValue <= 0 {

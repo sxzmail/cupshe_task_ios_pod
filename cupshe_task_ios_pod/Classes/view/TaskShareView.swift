@@ -51,13 +51,22 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
     private var taskBtn_finish_color:UIColor = UIColor(red: CGFloat(216/255.0), green: CGFloat(216/255.0), blue: CGFloat(216/255.0), alpha: 1)
     
     private var task_desc_txt_color:UIColor = UIColor(red: CGFloat(102/255.0), green: CGFloat(102/255.0), blue: CGFloat(102/255.0), alpha: 1)
+    
+    private var boldPath:String?
+//    private var demiPath:String?
+    private var mediumPath:String?
+//    private var regularPath:String?
 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     override init(frame: CGRect){
         super.init(frame: frame)
-        fontManager.regCustomFont(for: TaskShareView.self)
+//        fontManager.regCustomFont(for: TaskShareView.self)
+        self.boldPath = fontManager.getBoldFontPath(for: TaskShareView.self)
+//        self.demiPath = fontManager.getDemiFontPath(for: TaskShareView.self)
+        self.mediumPath = fontManager.getMediumFontPath(for: TaskShareView.self)
+//        self.regularPath = fontManager.getrRegularFontPath(for: TaskShareView.self)
     }
     public func initView(uiViewController: UIViewController,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId: String,taskId: Int,env:TaskEnvironment){
         
@@ -96,7 +105,10 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         var popTitleTxt:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent ))
         popTitleTxt.text = LangConfig.lang[lang]!["taskSharePopTitle"]
         popTitleTxt.textAlignment = .center
-        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
+        if self.boldPath != nil {
+            popTitleTxt.font = UIFont.init(name: self.boldPath!, size: 16 * heightPercent)
+        }
+//        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
 //        popTitleTxt.font = UIFont.systemFont(ofSize: 16 * heightPercent,weight: .bold)//UIFont(name:, size: 16 * heightPercent)
        
 
@@ -122,7 +134,10 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         facebookLbl.text = "Facebook"
         facebookLbl.textAlignment = .center
         
-        facebookLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
+//        facebookLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
+        if self.mediumPath != nil {
+            facebookLbl.font = UIFont.init(name: self.mediumPath!, size: 12 * heightPercent)
+        }
         
         colView_facebook.addSubview(facebookBtn)
         colView_facebook.addSubview(facebookLbl)
@@ -138,7 +153,10 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         var messengerLbl:UILabel = UILabel(frame: CGRect(x: 0, y: CGFloat(35 * widthPercent), width: (screenWidth * 0.3), height: 15 * heightPercent ))
         messengerLbl.text = "Messenger"
         messengerLbl.textAlignment = .center
-        messengerLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
+//        messengerLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
+        if self.mediumPath != nil {
+            messengerLbl.font = UIFont.init(name: self.mediumPath!, size: 12 * heightPercent)
+        }
         
         colView_messenger.addSubview(messengerBtn)
         colView_messenger.addSubview(messengerLbl)
@@ -154,7 +172,10 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         insLbl.text = "Ins"
         insLbl.textAlignment = .center
 
-        insLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
+//        insLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
+        if self.mediumPath != nil {
+            insLbl.font = UIFont.init(name: self.mediumPath!, size: 12 * heightPercent)
+        }
         colView_ins.addSubview(insBtn)
         colView_ins.addSubview(insLbl)
         

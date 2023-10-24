@@ -28,7 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		10C713281E360C634A5CD6A4 /* cupshe_task_ios_pod.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = cupshe_task_ios_pod.podspec; path = ../cupshe_task_ios_pod.podspec; sourceTree = "<group>"; };
+		10C713281E360C634A5CD6A4 /* cupshe_task_ios_pod.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = cupshe_task_ios_pod.podspec; path = ../cupshe_task_ios_pod.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1DDE1182490909949BC72232 /* Pods-cupshe_task_ios_pod_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cupshe_task_ios_pod_Tests.debug.xcconfig"; path = "Target Support Files/Pods-cupshe_task_ios_pod_Tests/Pods-cupshe_task_ios_pod_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		3EC3462EA7910DD54F098E97 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		4F6FFCE1280EF939C105DABE /* Pods-cupshe_task_ios_pod_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cupshe_task_ios_pod_Tests.release.xcconfig"; path = "Target Support Files/Pods-cupshe_task_ios_pod_Tests/Pods-cupshe_task_ios_pod_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -212,10 +212,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = HYYYGRS7WF;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = HYYYGRS7WF;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -482,6 +484,7 @@
 			baseConfigurationReference = 8E6811D06B09F92296C6EAA3 /* Pods-cupshe_task_ios_pod_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = HYYYGRS7WF;
 				INFOPLIST_FILE = cupshe_task_ios_pod/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -498,6 +501,7 @@
 			baseConfigurationReference = 7D9F2D25E646C070DDB47693 /* Pods-cupshe_task_ios_pod_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = HYYYGRS7WF;
 				INFOPLIST_FILE = cupshe_task_ios_pod/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -513,6 +517,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1DDE1182490909949BC72232 /* Pods-cupshe_task_ios_pod_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = HYYYGRS7WF;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -536,6 +541,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4F6FFCE1280EF939C105DABE /* Pods-cupshe_task_ios_pod_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = HYYYGRS7WF;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",

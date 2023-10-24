@@ -57,12 +57,21 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     
     private var tips_color:UIColor = UIColor(red: CGFloat(244/255.0), green: CGFloat(116/255.0), blue: CGFloat(18/255.0), alpha: 1)
 
+    private var boldPath:String?
+    private var demiPath:String?
+    private var mediumPath:String?
+    private var regularPath:String?
+    
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     override init(frame: CGRect){
         super.init(frame: frame)
-        fontManager.regCustomFont(for: TaskListView.self)
+//        fontManager.regCustomFont(for: TaskListView.self)
+        self.boldPath = fontManager.getBoldFontPath(for: TaskListView.self)
+        self.demiPath = fontManager.getDemiFontPath(for: TaskListView.self)
+        self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
+        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
     public func initView(uiViewController: UIViewController,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment){
         self.brand = brand
@@ -102,10 +111,15 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         var popTitleTxt:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent ))
         popTitleTxt.text = LangConfig.lang[lang]!["taskPopTitle"]
         popTitleTxt.textAlignment = .center
-        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
+//        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
+        if self.boldPath != nil {
+            popTitleTxt.font = UIFont.init(name: self.boldPath!, size: 16 * heightPercent)
+        }
+        
        
 
         var closeBtn = SubclassedUIButton(frame: CGRect(x: 339 * widthPercent, y: 16 * heightPercent, width: 20 * heightPercent, height: 20 * heightPercent))
+        
         closeBtn.setBackgroundImage(sdkManager.sdk_img(named: "close"), for: .normal)
         closeBtn.addTarget(self, action: #selector(dismissTaskList), for:.touchUpInside)
         
@@ -173,8 +187,11 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 col_title.text = taskInfo.taskName
                 col_title.textAlignment = .left
                 col_title.textColor = .black
-                col_title.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 14 * heightPercent)
-
+//                col_title.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 14 * heightPercent)
+                if self.demiPath != nil {
+                    col_title.font = UIFont.init(name: self.demiPath!, size: 14 * heightPercent)
+                }
+                
 
 
                 var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 , y: CGFloat(5 * widthPercent), width: 6.06 * widthPercent, height: 19 * heightPercent))
@@ -204,7 +221,10 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 tipsLbl.textAlignment = .center
                 tipsLbl.textColor = .white
                 tipsLbl.code = "lbl_taskId_" + String(taskInfo.taskId)
-                tipsLbl.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 12 * heightPercent)
+//                tipsLbl.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 12 * heightPercent)
+                if self.demiPath != nil {
+                    tipsLbl.font = UIFont.init(name: self.demiPath!, size: 12 * heightPercent)
+                }
 
                 tipsUIView.addSubview(tipsLbl)
 
@@ -239,8 +259,11 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 descLbl.textColor = task_desc_txt_color
                 descLbl.textAlignment = .left
                 descLbl.font = UIFont.init(name: "AvenirNextLTPro-Regular", size: 12 * heightPercent)
-//
-//
+                if self.regularPath != nil {
+                    descLbl.font = UIFont.init(name: self.regularPath!, size: 12 * heightPercent)
+                }
+
+
                 row.addSubview(col_icon)
                 row.addSubview(col_title)
                 row.addSubview(oprateBtn)

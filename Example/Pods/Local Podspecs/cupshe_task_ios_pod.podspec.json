@@ -20,14 +20,8 @@
   },
   "source_files": "cupshe_task_ios_pod/Classes/**/*",
   "resources": [
-    "cupshe_task_ios_pod/Assets/**/*",
     "cupshe_task_ios_pod/Assets/*"
   ],
-  "resource_bundles": {
-    "cupshe_task_ios_pod": [
-      "cupshe_task_ios_pod/Assets/*.*"
-    ]
-  },
   "public_header_files": "Pod/Classes/**/*.h",
   "swift_versions": "5.0",
   "dependencies": {

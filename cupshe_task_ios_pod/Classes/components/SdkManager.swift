@@ -18,19 +18,19 @@ open class SdkManager {
     }
     
     public func sdk_img(named name: String) -> UIImage? {
-        
-        let scale = UIScreen.main.scale
-        
-        let bundle = Bundle(for: SdkManager.self);
-        let name = "@" + String.init( format: "%d", scale ) + "x"
-        let dir = "cupshe_task_ios_pod.bundle"
-        var path:String? = bundle.path(forResource: name, ofType: "otf", inDirectory: dir)
-//        let img = UIImage(named: name, in:bundle,compatibleWith: nil)
-//        let img = UIImage(named: name)
-//        return  path != nil ? [UIImage imageWithContentsOfFile:path] : nil;
-        
-        return path != nil ? UIImage(contentsOfFile: path!) : nil
-    }
+            
+            let scale = UIScreen.main.scale
+            
+            let bundle = Bundle(for: SdkManager.self);
+    //        name = name + "@" + String.init( format: "%d", scale ) + "x"
+            let dir = "cupshe_task_ios_pod.bundle"
+            var path:String? = bundle.path(forResource: name+" 2", ofType: "png", inDirectory: "")
+    //        let img = UIImage(named: name, in:bundle,compatibleWith: nil)
+    //        let img = UIImage(named: name)
+    //        return  path != nil ? [UIImage imageWithContentsOfFile:path] : nil;
+            
+            return path != nil ? UIImage(contentsOfFile: path!) : nil
+        }
     
     
     
@@ -57,6 +57,38 @@ class FontManager {
 //    }
 //
 //
+    
+    public func getBoldFontPath(for classObj: AnyClass) -> String?{
+        let bundle = Bundle(for: classObj.self);
+        
+        let bold_path = bundle.path(forResource: "bold", ofType: "otf", inDirectory: "")
+        
+        return bold_path != nil  ? bold_path! : nil
+    }
+    
+    public func getDemiFontPath(for classObj: AnyClass) -> String?{
+        let bundle = Bundle(for: classObj.self);
+        
+        let demi_path = bundle.path(forResource: "demi", ofType: "otf", inDirectory: "")
+        
+        return demi_path != nil  ? demi_path! : nil
+    }
+    
+    public func getMediumFontPath(for classObj: AnyClass) -> String?{
+        let bundle = Bundle(for: classObj.self);
+        
+        let medium_path = bundle.path(forResource: "medium", ofType: "ttf", inDirectory: "")
+        
+        return medium_path != nil  ? medium_path! : nil
+    }
+    
+    public func getrRegularFontPath(for classObj: AnyClass) -> String?{
+        let bundle = Bundle(for: classObj.self);
+        
+        let regular_path = bundle.path(forResource: "regular", ofType: "otf", inDirectory: "")
+        
+        return regular_path != nil  ? regular_path! : nil
+    }
     
     
     public func regCustomFont(for classObj: AnyClass){
