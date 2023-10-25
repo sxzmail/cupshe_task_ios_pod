@@ -85,8 +85,8 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.env = env
 
         
-        widthPercent = screenWidth / ScreenConfig.baseWidth
-        heightPercent = screenHeight / ScreenConfig.baseHeight
+        widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
+        heightPercent = 1.0 //screenHeight / ScreenConfig.baseHeight
         
         
         self.alpha = 0
@@ -111,15 +111,10 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         var popTitleTxt:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent ))
         popTitleTxt.text = LangConfig.lang[lang]!["taskPopTitle"]
         popTitleTxt.textAlignment = .center
-//        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
-        if self.boldPath != nil {
-            popTitleTxt.font = UIFont.init(name: self.boldPath!, size: 16 * heightPercent)
-        }
-        
+        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
        
 
-        var closeBtn = SubclassedUIButton(frame: CGRect(x: 339 * widthPercent, y: 16 * heightPercent, width: 20 * heightPercent, height: 20 * heightPercent))
-        
+        var closeBtn = SubclassedUIButton(frame: CGRect(x: screenWidth - 16 - 20 , y: 16 * heightPercent, width: 20 * heightPercent, height: 20 * heightPercent))
         closeBtn.setBackgroundImage(sdkManager.sdk_img(named: "close"), for: .normal)
         closeBtn.addTarget(self, action: #selector(dismissTaskList), for:.touchUpInside)
         
@@ -172,29 +167,26 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 let taskInfo :TaskInfoVO = self.listData![i] as TaskInfoVO
                 
                 let border = CALayer()
-                var row:UIView = UIView(frame: CGRect(x: (screenWidth * 0.05), y: CGFloat( i * 62) * heightPercent, width: (screenWidth * 0.9), height: 60 * heightPercent))
+                var row:UIView = UIView(frame: CGRect(x: 16, y: CGFloat( i * 62) * heightPercent, width: (screenWidth - 32 ), height: 60 * heightPercent))
 //                row.backgroundColor = .blue
-                border.frame = CGRect(x: 0, y: 62 * heightPercent, width: (screenWidth * 0.9), height: 1);
+                border.frame = CGRect(x: 0, y: 62 * heightPercent, width: (screenWidth - 32), height: 1);
                 border.backgroundColor = line_color
                 //            row!.backgroundColor = .gray
                 row.layer.addSublayer(border)
                 
                 
-                var col_icon:UIImageView = UIImageView(frame: CGRect(x: 0, y: CGFloat(7 * widthPercent), width: CGFloat(32 * widthPercent), height: CGFloat(33 * heightPercent)))
+                var col_icon:UIImageView = UIImageView(frame: CGRect(x: 0, y: CGFloat(14 * heightPercent), width: CGFloat(32 * widthPercent), height: CGFloat(32 * heightPercent)))
                 col_icon.image = sdkManager.sdk_img(named: "progress")
 
-                var col_title:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: CGFloat(5 * widthPercent), width: (screenWidth * 0.9) - CGFloat(40 * widthPercent) - CGFloat(80 * widthPercent), height: 24 * heightPercent ))
+                var col_title:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: CGFloat(5 * heightPercent), width: (screenWidth - 32 ) - CGFloat(40 * widthPercent) - CGFloat(80 * widthPercent), height: 24 * heightPercent ))
                 col_title.text = taskInfo.taskName
                 col_title.textAlignment = .left
                 col_title.textColor = .black
-//                col_title.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 14 * heightPercent)
-                if self.demiPath != nil {
-                    col_title.font = UIFont.init(name: self.demiPath!, size: 14 * heightPercent)
-                }
-                
+                col_title.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 14 * heightPercent)
 
 
-                var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 , y: CGFloat(5 * widthPercent), width: 6.06 * widthPercent, height: 19 * heightPercent))
+
+                var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 , y: CGFloat(5 * heightPercent), width: 6.06 * widthPercent, height: 19 * heightPercent))
                 polygonUIView.backgroundColor = .white
                 if taskInfo.targetType == TaskType.CHECK_IN {
                     polygonUIView.code = "UIView_taskId_" + String(taskInfo.taskId)
@@ -207,7 +199,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
                 polygonUIView.addSubview(polygon_img)
 
-                var tipsUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 + CGFloat(6.06 * widthPercent), y: CGFloat(5 * widthPercent), width: 74 * widthPercent, height: 19 * heightPercent))
+                var tipsUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 + CGFloat(6.06 * widthPercent), y: CGFloat(5 * heightPercent), width: 74 * widthPercent, height: 19 * heightPercent))
                 tipsUIView.backgroundColor = tips_color
                 tipsUIView.layer.cornerRadius = 2
                 tipsUIView.layer.shadowRadius = 2
@@ -216,19 +208,16 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 }
                 tipsUIView.alpha = 0
 
-                var tipsLbl:TipsUILabel = TipsUILabel(frame: CGRect(x: 0,y: 0, width: 74 * widthPercent, height: 19 * heightPercent))
+                var tipsLbl:TipsUILabel = TipsUILabel(frame: CGRect(x: 0,y: 0, width: 74 * heightPercent, height: 19 * heightPercent))
                 tipsLbl.text = "Chances +1"
                 tipsLbl.textAlignment = .center
                 tipsLbl.textColor = .white
                 tipsLbl.code = "lbl_taskId_" + String(taskInfo.taskId)
-//                tipsLbl.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 12 * heightPercent)
-                if self.demiPath != nil {
-                    tipsLbl.font = UIFont.init(name: self.demiPath!, size: 12 * heightPercent)
-                }
+                tipsLbl.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 12 * heightPercent)
 
                 tipsUIView.addSubview(tipsLbl)
 
-                var oprateBtn = SubclassedUIButton(frame: CGRect(x: (screenWidth * 0.9) - CGFloat(80 * widthPercent), y: CGFloat(5 * widthPercent), width: 80 * widthPercent, height: 24 * heightPercent))
+                var oprateBtn = SubclassedUIButton(frame: CGRect(x: (screenWidth - 32) - CGFloat(80 * widthPercent), y: CGFloat(5 * heightPercent), width: 80 * widthPercent, height: 24 * heightPercent))
                 oprateBtn.tintColor = .white
                 oprateBtn.titleLabel?.font = UIFont.systemFont(ofSize: 12 * heightPercent,weight: .bold)
                 oprateBtn.taskId = taskInfo.taskId
@@ -253,17 +242,14 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 }
 
 
-                var descLbl:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: 33 * heightPercent, width: (screenWidth * 0.9) - CGFloat(40 * widthPercent) - CGFloat(40 * widthPercent), height: 15 * heightPercent ))
+                var descLbl:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: 33 * heightPercent, width: screenWidth - CGFloat(40 * widthPercent) - CGFloat(32 * widthPercent), height: 15 * heightPercent ))
 
                 descLbl.text = taskInfo.taskDesc//"Log in daily to obtain a lottery opportunity" //
                 descLbl.textColor = task_desc_txt_color
                 descLbl.textAlignment = .left
                 descLbl.font = UIFont.init(name: "AvenirNextLTPro-Regular", size: 12 * heightPercent)
-                if self.regularPath != nil {
-                    descLbl.font = UIFont.init(name: self.regularPath!, size: 12 * heightPercent)
-                }
-
-
+//
+//
                 row.addSubview(col_icon)
                 row.addSubview(col_title)
                 row.addSubview(oprateBtn)
@@ -290,7 +276,6 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         
 //        self.present(self.alertController, animated: true, completion: nil)
     }
-    
     
     
     @objc func dismissTaskList(){
