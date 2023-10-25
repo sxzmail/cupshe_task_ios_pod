@@ -240,7 +240,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         UIView.animate(withDuration: 0.1, animations: {
             self.alpha = 1
             
-            self.popContentView.frame.origin.y = self.screenHeight - 151
+            self.popContentView.frame.origin.y = self.screenHeight - 151 - 52 - 40
         })
         
         
