@@ -225,15 +225,14 @@ class CountdownView : UIView{
     
     @objc func doGetGift(sender:SubclassedUIButton){
         print("doGetGift")
-        //浏览
-        var taskPageViewParam: [AnyHashable : Any] = ["taskId" : self.taskPageViewData!.taskId, "jumpPageUrl" : self.taskPageViewData!.redirectUrl]
-        //发送通知
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_getRewardRedirect"), object: nil, userInfo:taskPageViewParam )
-//        UIView.animate(withDuration: 0.1, animations: {
-//            self.alpha = 0
-//            print(self.frame.size.height)
-//            self.popContentView.frame.origin.y = self.screenHeight
-//        })
+        
+        if self.env != nil {
+            //浏览
+            var taskPageViewParam: [AnyHashable : Any] = ["taskId" : self.taskPageViewData!.taskId, "jumpPageUrl" : ApiConfig.getRedirectUrl(env: self.env!)]
+            //发送通知
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_getRewardRedirect"), object: nil, userInfo:taskPageViewParam )
+        }
+     
     }
     
     

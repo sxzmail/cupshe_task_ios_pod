@@ -45,6 +45,19 @@ struct ApiConfig {
         
         return ""
     }
+    
+    public static func getRedirectUrl(env:TaskEnvironment)  -> String{
+        switch env {
+            case .TEST:
+                return "https://api-release.kapeixi.cn/help/november-activity.html?needToken=1";
+            case .PRE:
+                return ""
+            case .PRODUCTION:
+                return "https://newappapi.cupshe.com/help/november-activity.html?needToken=1";
+        }
+        return ""
+        
+    }
 
 }
 
