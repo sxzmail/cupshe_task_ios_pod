@@ -343,6 +343,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                     self.showToast(taskId: sender.taskId!,tipMsg:LangConfig.lang[self.lang]!["Chances"]! + " +1")
                     if userTaskProgressInfo.status == 2 || userTaskProgressInfo.status == 3 {
                         sender.backgroundColor = self.taskBtn_finish_color
+                        sender.removeTarget(self, action: nil, for:.touchUpInside)
                     }
                 }
 
