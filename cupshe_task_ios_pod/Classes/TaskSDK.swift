@@ -239,7 +239,7 @@ public class TaskSDK : NSObject {
                     //开始浏览任务
                         
                     self.countDownView = CountdownView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                    self.countDownView!.showView(uiViewController: self.uiContextHanlder!,token: self.token,brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal,lang: self.lang,data:info!,env: self.env)
+                    self.countDownView!.showView(uiViewController: self.uiContextHanlder!,token: self.token,brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal,lang: self.lang,data:info!,env: self.env,activityId: self.activityId)
                     
                     
                     //        showCountdownView();
@@ -301,7 +301,6 @@ public class TaskSDK : NSObject {
 
         }else if type == TaskType.SHARE {
             //分享
-          
             if self.uiContextHanlder != nil {
                 var taskShareView: TaskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 

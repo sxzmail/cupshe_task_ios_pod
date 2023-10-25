@@ -40,6 +40,8 @@ class CountdownView : UIView{
     private var site: String = ""
     private var terminal: String = ""
     private var env:TaskEnvironment?
+    private var activityId: String = ""
+    
     
     
 //    private var countDownSecbase: Int = 5
@@ -70,7 +72,8 @@ class CountdownView : UIView{
 //        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
 
-    public func showView(uiViewController: UIViewController,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment){
+    public func showView(uiViewController: UIViewController,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment,activityId:String){
+        self.activityId = activityId
         self.env = env
         self.taskPageViewData = data
         self.token = token
@@ -227,10 +230,9 @@ class CountdownView : UIView{
         print("doGetGift")
         
         if self.env != nil {
-            //浏览
-            var taskPageViewParam: [AnyHashable : Any] = ["taskId" : self.taskPageViewData!.taskId, "jumpPageUrl" : ApiConfig.getRedirectUrl(env: self.env!)]
+            var taskPageViewParam: [AnyHashable : Any] = ["taskId" : 0, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : ApiConfig.getRedirectUrl(env: self.env!), "activityId": self.activityId]
             //发送通知
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_getRewardRedirect"), object: nil, userInfo:taskPageViewParam )
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
         }
      
     }
