@@ -304,29 +304,9 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         }
                 
             
-            self.dismissTaskShare()
+//        self.dismissTaskShare()
         
-        
-        
-        
-        
-//        var id = sender.taskId! + 2
     }
-
-//
-//    func prepareForPopoverPresentation(popoverPresentationController: UIPopoverPresentationController)
-//    {
-//    }
-//
-//    func popoverPresentationControllerDidDismissPopover(popoverPresentationController: UIPopoverPresentationController)
-//    {
-//    }
-//
-//    func popoverPresentationControllerShouldDismissPopover(popoverPresentationController: UIPopoverPresentationController) -> Bool
-//    {
-//        return true
-//    }
-
 
 
 }

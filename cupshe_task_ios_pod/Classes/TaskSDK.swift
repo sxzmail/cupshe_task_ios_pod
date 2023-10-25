@@ -92,9 +92,6 @@ public class TaskSDK : NSObject {
         self.env = env
     }
     
-    public func setAa(env : TaskEnvironment){
-        self.env = env
-    }
 
     
 //    public func startPageView(pageName:String){
@@ -251,5 +248,68 @@ public class TaskSDK : NSObject {
         }
     }
     
+    
+    public func taskOperate(taskId:Int,type:String) {
+
+        if type == TaskType.CHECK_IN {
+            //签到
+
+            let query: TaskCheckInParam = TaskCheckInParam()
+            query.actionId = TaskType.CHECK_IN
+            query.token = self.token
+            if !self.brand.isEmpty {
+                query.brandId = brand
+            }
+            if !self.channel.isEmpty {
+                query.channelId = channel
+            }
+            if !self.site.isEmpty {
+                query.siteId = site
+            }
+            if !self.terminal.isEmpty {
+                query.terminalId = terminal
+            }
+            if !self.lang.isEmpty {
+                query.appLangCode = self.lang
+            }
+            if taskId != nil && taskId > 0 {
+                query.taskId  = taskId
+            }
+
+//        brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, lang: self.lang
+            self.taskVm.taskCheckIn(env:self.env,token: self.token, params: query) { lst in
+
+
+                if lst != nil && lst!.count > 0 {
+                    //签到成功
+                    let userTaskProgressInfo:UserTaskProgress = lst![0] as UserTaskProgress
+
+                    if userTaskProgressInfo.status == 2 || userTaskProgressInfo.status == 3 {
+
+                    }
+                }
+
+            }
+        }else if type == TaskType.PAGE_VIEW {
+            //浏览
+            //得到taskInfo
+            let taskInfo:TaskInfoVO = TaskInfoVO()
+            var taskPageViewParam: [AnyHashable : Any] = ["taskId" : taskId, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : taskInfo.targetAppUrl, "activityId": self.activityId]
+            //发送通知
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
+
+
+        }else if type == TaskType.SHARE {
+            //分享
+          
+            if self.uiContextHanlder != nil {
+                var taskShareView: TaskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                
+                taskShareView.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env)
+                taskShareView.showView()
+            }
+
+        }
+    }
     
 }
