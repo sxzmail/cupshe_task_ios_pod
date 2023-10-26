@@ -106,7 +106,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         popTitleTxt.text = LangConfig.lang[lang]!["taskSharePopTitle"]
         popTitleTxt.textAlignment = .center
         if self.boldPath != nil {
-            popTitleTxt.font = UIFont.init(name: self.boldPath!, size: 16 * heightPercent)
+            popTitleTxt.font = UIFont.init(name:"AvenirNextLTPro-Bold", size: 16 * heightPercent)
         }
 //        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
 //        popTitleTxt.font = UIFont.systemFont(ofSize: 16 * heightPercent,weight: .bold)//UIFont(name:, size: 16 * heightPercent)
@@ -136,7 +136,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         
 //        facebookLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
         if self.mediumPath != nil {
-            facebookLbl.font = UIFont.init(name: self.mediumPath!, size: 12 * heightPercent)
+            facebookLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
         }
         
         colView_facebook.addSubview(facebookBtn)
@@ -155,7 +155,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         messengerLbl.textAlignment = .center
 //        messengerLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
         if self.mediumPath != nil {
-            messengerLbl.font = UIFont.init(name: self.mediumPath!, size: 12 * heightPercent)
+            messengerLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
         }
         
         colView_messenger.addSubview(messengerBtn)
@@ -174,7 +174,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
 
 //        insLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
         if self.mediumPath != nil {
-            insLbl.font = UIFont.init(name: self.mediumPath!, size: 12 * heightPercent)
+            insLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
         }
         colView_ins.addSubview(insBtn)
         colView_ins.addSubview(insLbl)

@@ -117,7 +117,7 @@ class CountdownView : UIView{
         
         tipsLbl.textAlignment = .center
         tipsLbl.textColor = .white
-        tipsLbl.font = UIFont.init(name: self.demiPath!, size: 12 * heightPercent)
+        tipsLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
 
         
     
@@ -162,7 +162,7 @@ class CountdownView : UIView{
         countDownLbl!.tintColor = .white
 //        countDownLbl!.titleLabel?.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 12 * heightPercent)
         if self.boldPath != nil {
-            countDownLbl!.titleLabel?.font = UIFont.init(name: self.boldPath!, size: 12 * heightPercent)
+            countDownLbl!.titleLabel?.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 12 * heightPercent)
         }
         
         countDownLbl!.setTitle(self.countDownSec >= 0 ? String(self.countDownSec)+"s" : LangConfig.lang[lang]!["get"], for: .normal)
