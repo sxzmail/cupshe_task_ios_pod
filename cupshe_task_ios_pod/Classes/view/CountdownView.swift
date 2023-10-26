@@ -121,7 +121,7 @@ class CountdownView : UIView{
 
         
     
-        self.countDownTipsView!.alpha = 0
+        self.countDownTipsView!.alpha = 1
         self.countDownTipsView!.addSubview(tipsLbl)
         
         
@@ -130,7 +130,7 @@ class CountdownView : UIView{
         self.tipsTriangle = UIImageView(frame: CGRect(x: -8, y: 19,width: 6.02 , height: 4))
         self.tipsTriangle!.image = sdkManager.sdk_img(named: "Triangle")
         
-        self.tipsTriangle!.alpha = 0
+        self.tipsTriangle!.alpha = 1
         
         self.addSubview(self.countDownTipsView!)
         self.addSubview(self.tipsTriangle!)
@@ -223,33 +223,33 @@ class CountdownView : UIView{
                     }
                     self.countDownLbl!.setTitle( getStr, for: .normal)
                     
-                    //设置结束图
-                    if self.browseIcon != nil && self.taskPageViewData != nil {
-                        
-                        if self.taskPageViewData!.endImageUrlApp.isEmpty {
-                            self.browseIcon!.setBackgroundImage(self.sdkManager.sdk_img(named: "gift"), for: .normal)
-                        } else {
-                            self.globalVm.fetchRemoteImage(self.taskPageViewData!.endImageUrlApp) { imgData in
-                                if imgData != nil {
-                                    if UIImage(data: imgData!) != nil {
-                                        self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    //显示tips
-                    if self.countDownTipsView != nil && self.tipsTriangle != nil {
-                        self.countDownTipsView!.alpha = 1
-                        self.tipsTriangle!.alpha = 1
-                        
-                        UIView.animate(withDuration: 5, animations: {
-                            self.countDownTipsView!.alpha = 0
-                            self.tipsTriangle!.alpha = 0
-                            
-                        })
-                    }
+//                    //设置结束图
+//                    if self.browseIcon != nil && self.taskPageViewData != nil {
+//                        
+//                        if self.taskPageViewData!.endImageUrlApp.isEmpty {
+//                            self.browseIcon!.setBackgroundImage(self.sdkManager.sdk_img(named: "gift"), for: .normal)
+//                        } else {
+//                            self.globalVm.fetchRemoteImage(self.taskPageViewData!.endImageUrlApp) { imgData in
+//                                if imgData != nil {
+//                                    if UIImage(data: imgData!) != nil {
+//                                        self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                    
+//                    //显示tips
+//                    if self.countDownTipsView != nil && self.tipsTriangle != nil {
+//                        self.countDownTipsView!.alpha = 1
+//                        self.tipsTriangle!.alpha = 1
+//                        
+//                        UIView.animate(withDuration: 5, animations: {
+//                            self.countDownTipsView!.alpha = 0
+//                            self.tipsTriangle!.alpha = 0
+//                            
+//                        })
+//                    }
                     
                     
                     let query: TaskPageViewParam = TaskPageViewParam()
@@ -313,7 +313,7 @@ class CountdownView : UIView{
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
         }
         
-        self.dismissCountdownView()
+//        self.dismissCountdownView()
      
     }
     
