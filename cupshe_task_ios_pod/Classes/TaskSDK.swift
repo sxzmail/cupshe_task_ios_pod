@@ -31,6 +31,10 @@ public class TaskSDK : NSObject {
     
     private var userTaskId:Int = 0
     
+    private var callbackBlock:AnyObject?
+    
+    private var clickListFlag: Bool = false
+    
     public init(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIViewController){
         super.init()
         self.token = token
@@ -54,7 +58,12 @@ public class TaskSDK : NSObject {
         self.activityId = activityId
     }
     
-    
+    // 接收OC传递的Block,调用并回传数据
+    public func setCallBack(parameter:[AnyHashable : Any]){
+//        let callback = parameter["callback"]
+        self.callbackBlock = parameter["callback"] as! AnyObject
+        
+    }
     
     public func setToken(token:String){
         self.token = token
@@ -122,6 +131,12 @@ public class TaskSDK : NSObject {
     }
     
     public func showTaskList(){
+        if self.clickListFlag {
+            
+            return
+        }
+       
+        self.clickListFlag = true
         if self.uiContextHanlder != nil {
             //得到当前用户所有的任务
             
@@ -159,11 +174,13 @@ public class TaskSDK : NSObject {
 //                    if self.taskListView == nil {
                         self.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                         
-                    self.taskListView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env)
+                    self.taskListView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,notifyCallback:self.callbackBlock!)
 //                    }
                     
                     self.taskListView!.setListData(taskList: taskList!)
-                    self.taskListView!.showView()
+                    self.taskListView!.showView { flag in
+                        self.clickListFlag = false
+                    }
                 }
                 
             }
@@ -175,7 +192,7 @@ public class TaskSDK : NSObject {
         
 //        closeCountdownView();
         if self.taskListView != nil {
-            self.taskListView?.dismissTaskList()
+            self.taskListView!.dismissTaskList()
         }
     }
     
@@ -233,18 +250,19 @@ public class TaskSDK : NSObject {
             }
             if taskId != nil && taskId > 0 {
                 query.taskId  = taskId
-            }
-            taskVm.startPageViewTask(env:self.env,token: self.token, params: query) { info in
-                if info != nil {
-                    //开始浏览任务
+                taskVm.startPageViewTask(env:self.env,token: self.token, params: query) { info in
+                    if info != nil {
+                        //开始浏览任务
+                            
+                        self.countDownView = CountdownView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                        self.countDownView!.showView(uiViewController: self.uiContextHanlder!,token: self.token,brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal,lang: self.lang,data:info!,env: self.env,activityId: self.activityId,notifyCallback:self.callbackBlock!)
                         
-                    self.countDownView = CountdownView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                    self.countDownView!.showView(uiViewController: self.uiContextHanlder!,token: self.token,brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal,lang: self.lang,data:info!,env: self.env,activityId: self.activityId)
-                    
-                    
-                    //        showCountdownView();
+                        
+                        //        showCountdownView();
+                    }
                 }
             }
+            
         }
     }
     

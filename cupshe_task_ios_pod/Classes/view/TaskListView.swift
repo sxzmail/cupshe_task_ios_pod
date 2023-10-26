@@ -62,6 +62,10 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     private var mediumPath:String?
     private var regularPath:String?
     
+    private var notifyCallback:AnyObject?
+    
+    private var opFlag:Bool = false
+    
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -73,7 +77,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
         self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
-    public func initView(uiViewController: UIViewController,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment){
+    public func initView(uiViewController: UIViewController,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,notifyCallback:AnyObject){
         self.brand = brand
         self.channel = channel
         self.site = site
@@ -83,7 +87,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.activityId = activityId
         self.uiViewController = uiViewController
         self.env = env
-
+        self.notifyCallback = notifyCallback
         
         widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
         heightPercent = 1.0 //screenHeight / ScreenConfig.baseHeight
@@ -158,7 +162,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.listData = taskList
     }
 
-    public func showView(){
+    public func showView(callback: @escaping (Bool) -> Void){
         if self.listData != nil {
             self.empContent.removeFromSuperview()
             let countNum = self.listData!.count
@@ -276,7 +280,9 @@ class TaskListView : UIView ,UIScrollViewDelegate{
             self.alpha = 1
             
             self.popContentView.frame.origin.y = self.screenHeight * 0.5
-        })
+        }) { flag in
+            callback(flag)
+        }
         
 //        self.present(self.alertController, animated: true, completion: nil)
     }
@@ -285,7 +291,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     @objc func dismissTaskList(){
         UIView.animate(withDuration: 0.1, animations: {
             self.alpha = 0
-            print(self.frame.size.height)
+       
             self.popContentView.frame.origin.y = self.screenHeight
             self.removeFromSuperview()
             
@@ -294,7 +300,10 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     
     
     @objc func taskOp(sender:SubclassedUIButton) {
-        
+        if self.opFlag {
+            return
+        }
+        self.opFlag = true
         let type: String = sender.taskType!
         let taskId: Int = sender.taskId!
         if type == TaskType.CHECK_IN {
@@ -335,6 +344,8 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                         sender.removeTarget(self, action: nil, for:.touchUpInside)
                     }
                 }
+                
+                self.opFlag = false
 
             }
         }else if type == TaskType.PAGE_VIEW {
@@ -345,10 +356,12 @@ class TaskListView : UIView ,UIScrollViewDelegate{
             var taskPageViewParam: [AnyHashable : Any] = ["taskId" : sender.taskId!, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : sender.jumpPageUrl!, "activityId": sender.activityId!]
             //发送通知
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
+            self.opFlag = false
             self.dismissTaskList()
 
         }else if type == TaskType.SHARE {
             //分享
+            self.opFlag = false
             self.dismissTaskList()
             self.showShareView(taskId: taskId)
 
@@ -385,7 +398,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     }
     
     public func showToast(taskId:Int,tipMsg:String){
-        print(self.subviews.count)
+//        print(self.subviews.count)
         
         self.listScrollView.subviews.map { row in
             row.subviews.map { ui in

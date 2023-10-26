@@ -56,6 +56,8 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
 //    private var demiPath:String?
     private var mediumPath:String?
 //    private var regularPath:String?
+    
+    private var clickFlag: Bool = false
 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -252,7 +254,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
     @objc func dismissTaskShare(){
         UIView.animate(withDuration: 0.1, animations: {
             self.alpha = 0
-            print(self.frame.size.height)
+//            print(self.frame.size.height)
             self.popContentView.frame.origin.y = self.screenHeight
             self.removeFromSuperview()
         })
@@ -260,7 +262,13 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
     
     
     @objc func shareOp(sender:SubclassedUIButton) {
-        print(sender.shareType!)
+        if self.clickFlag {
+            print("share no")
+            return
+        }
+        print("share yes")
+        self.clickFlag = true
+        
         let shareType:String = sender.shareType!
         print(taskId)
         print("taskId")
@@ -289,22 +297,20 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         }
         
         self.taskVm.getShareUrl(env:self.env!,token: self.token, params: shareQuery) { shareUrl in
-            print("shareUrl1")
-            print(shareUrl)
-            print("shareUrl2")
+          
             if shareUrl != nil && !shareUrl!.isEmpty {
-                print("shareUrl")
-                print(shareUrl)
+                
                 var taskNotice: [AnyHashable : Any] = ["shareUrl" : shareUrl, "type": shareType]
                 //发送通知
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_userShare"), object: nil, userInfo:taskNotice )
-                print("shareUrl")
-                print(shareUrl)
+            
             }
+            
+            self.clickFlag = false
         }
                 
             
-//        self.dismissTaskShare()
+        self.dismissTaskShare()
         
     }
 

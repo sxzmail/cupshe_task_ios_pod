@@ -57,8 +57,15 @@ class CountdownView : UIView{
     private var countDownTipsView: UIView?
     private var tipsTriangle:UIImageView?
     
+    private var startImg:UIImage?
+    private var endImg:UIImage?
+    
     private var boldPath:String?
     private var demiPath:String?
+    
+    private var notifyCallback:AnyObject?
+    private var clickFlag: Bool = false
+    
 //    private var mediumPath:String?
 //    private var regularPath:String?
 //
@@ -77,13 +84,14 @@ class CountdownView : UIView{
 //        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
 
-    public func showView(uiViewController: UIViewController,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment,activityId:String){
+    public func showView(uiViewController: UIViewController,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment,activityId:String,notifyCallback:AnyObject){
         self.activityId = activityId
         self.env = env
         self.taskPageViewData = data
         self.token = token
         self.lang = lang
         self.countDownSec = self.taskPageViewData!.targetValue
+        self.notifyCallback = notifyCallback
 //        self.countDownSec = self.taskPageViewData!.targetValue
        
         widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
@@ -96,7 +104,23 @@ class CountdownView : UIView{
             globalVm.fetchRemoteImage(data.startImageUrlApp) { imgData in
                 if imgData != nil {
                     if UIImage(data: imgData!) != nil {
-                        self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
+                        DispatchQueue.main.async {
+                            self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
+                        }
+                    }
+                }
+            }
+         
+        }
+        
+        if data.endImageUrlApp.isEmpty {
+            self.endImg = sdkManager.sdk_img(named: "gift")
+        }else{
+            globalVm.fetchRemoteImage(self.taskPageViewData!.endImageUrlApp) { imgData in
+                if imgData != nil {
+                    if UIImage(data: imgData!) != nil {
+                        self.endImg = UIImage(data: imgData!)!
+                        
                     }
                 }
             }
@@ -225,18 +249,10 @@ class CountdownView : UIView{
                     
                     //设置结束图
                     if self.browseIcon != nil && self.taskPageViewData != nil {
-                        
-                        if self.taskPageViewData!.endImageUrlApp.isEmpty {
-                            self.browseIcon!.setBackgroundImage(self.sdkManager.sdk_img(named: "gift"), for: .normal)
-                        } else {
-                            self.globalVm.fetchRemoteImage(self.taskPageViewData!.endImageUrlApp) { imgData in
-                                if imgData != nil {
-                                    if UIImage(data: imgData!) != nil {
-                                        self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
-                                    }
-                                }
-                            }
+                        DispatchQueue.main.async {
+                            self.browseIcon!.setBackgroundImage(self.endImg!, for: .normal)
                         }
+                        
                     }
                     
                     //显示tips
@@ -306,13 +322,28 @@ class CountdownView : UIView{
     
     @objc func doGetGift(sender:SubclassedUIButton){
         print("doGetGift")
-        
-        if self.env != nil {
-            var taskPageViewParam: [AnyHashable : Any] = ["taskId" : 0, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : ApiConfig.getRedirectUrl(env: self.env!), "activityId": self.activityId]
-            //发送通知
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
+        if self.clickFlag {
+            print("doGetGift Fal")
+            return
         }
+        print("doGetGift Ok")
+        self.clickFlag = true
         
+        if(self.notifyCallback != nil && self.env != nil){
+           
+            //  OC的Block - >Swift的闭包,closure就是Block转化后的闭包
+            typealias ClosureType = @convention(block) (String) -> Void
+            let blockPtr = UnsafeRawPointer(Unmanaged<AnyObject>.passUnretained(self.notifyCallback as AnyObject).toOpaque())
+            let closure = unsafeBitCast(blockPtr, to: ClosureType.self)
+            closure(ApiConfig.getRedirectUrl(env: self.env!))
+        }
+        self.clickFlag = false
+//        if self.env != nil {
+//            var taskPageViewParam: [AnyHashable : Any] = ["taskId" : 0, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : ApiConfig.getRedirectUrl(env: self.env!), "activityId": self.activityId]
+//            //发送通知
+//            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskGetReward"), object: nil, userInfo:taskPageViewParam )
+//        }
+//        
         self.dismissCountdownView()
      
     }
