@@ -15,8 +15,9 @@ class CountdownView : UIView{
 //    private var dataQueue:DispatchQueue?
     
     private var taskVm: TaskVM = TaskVM()
-    
+    private var globalVm: GlobalVM = GlobalVM()
     private var fontManager:FontManager = FontManager()
+    private var sdkManager:SdkManager = SdkManager()
     
     private var screenWidth:CGFloat = UIScreen.main.bounds.width
     private var screenHeight:CGFloat = UIScreen.main.bounds.height
@@ -26,6 +27,7 @@ class CountdownView : UIView{
     
     private var baseProgressVal: Float = 10.0
     
+    private var tipsBgColor:UIColor = UIColor(red: CGFloat(0/255.0), green: CGFloat(0/255.0), blue: CGFloat(0/255.0), alpha: 0.3)
     
     private var progressBarStartColor:UIColor = UIColor(red: CGFloat(255/255.0), green: CGFloat(138/255.0), blue: 0, alpha: 1)
     
@@ -51,9 +53,12 @@ class CountdownView : UIView{
     
     private var progressView: GradientProgressView?
     private var countDownLbl:SubclassedUIButton?
+    private var browseIcon:SubclassedUIButton?
+    private var countDownTipsView: UIView?
+    private var tipsTriangle:UIImageView?
     
     private var boldPath:String?
-//    private var demiPath:String?
+    private var demiPath:String?
 //    private var mediumPath:String?
 //    private var regularPath:String?
 //
@@ -67,7 +72,7 @@ class CountdownView : UIView{
         
 //        fontManager.regCustomFont(for: CountdownView.self)
         self.boldPath = fontManager.getBoldFontPath(for: CountdownView.self)
-//        self.demiPath = fontManager.getDemiFontPath(for: TaskListView.self)
+        self.demiPath = fontManager.getDemiFontPath(for: TaskListView.self)
 //        self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
 //        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
@@ -80,14 +85,58 @@ class CountdownView : UIView{
         self.lang = lang
         self.countDownSec = self.taskPageViewData!.targetValue
 //        self.countDownSec = self.taskPageViewData!.targetValue
-        var sdkManager:SdkManager = SdkManager()
-        widthPercent = screenWidth / ScreenConfig.baseWidth
-        heightPercent = screenHeight / ScreenConfig.baseHeight
+       
+        widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
+        heightPercent = 1.0 // screenHeight / ScreenConfig.baseHeight
         
-        var browseIcon:SubclassedUIButton = SubclassedUIButton(frame: CGRect(x: 0, y: 0, width: 46 * widthPercent, height: 46 * widthPercent))
-        browseIcon.setBackgroundImage(sdkManager.sdk_img(named: "gift"), for: .normal)
-//        self.taskIcon.setBackgroundImage(UIImage(named: "gift"), for: .normal)
-        self.addSubview(browseIcon)
+        self.browseIcon = SubclassedUIButton(frame: CGRect(x: 0, y: 0, width: 46 * widthPercent, height: 46 * widthPercent))
+        if data.startImageUrlApp.isEmpty {
+            self.browseIcon!.setBackgroundImage(sdkManager.sdk_img(named: "gift"), for: .normal)
+        } else {
+            globalVm.fetchRemoteImage(data.startImageUrlApp) { imgData in
+                if imgData != nil {
+                    if UIImage(data: imgData!) != nil {
+                        self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
+                    }
+                }
+            }
+        }
+        self.addSubview(self.browseIcon!)
+        
+        
+        countDownTipsView = UIView(frame: CGRect(x:  -160, y: 8, width: 152, height: 27))
+        self.countDownTipsView!.backgroundColor = tipsBgColor
+        self.countDownTipsView?.layer.cornerRadius = 5
+    
+        var tipsLbl:TipsUILabel = TipsUILabel(frame: CGRect(x: 0,y: 0, width: 152, height: 27))
+        if self.taskPageViewData != nil && !self.taskPageViewData!.uiDesc.isEmpty {
+            tipsLbl.text = self.taskPageViewData!.uiDesc
+        }else{
+            tipsLbl.text = "Lucky Draw Chances +1"
+        }
+        
+        tipsLbl.textAlignment = .center
+        tipsLbl.textColor = .white
+        tipsLbl.font = UIFont.init(name: self.demiPath!, size: 12 * heightPercent)
+
+        
+    
+        self.countDownTipsView!.alpha = 0
+        self.countDownTipsView!.addSubview(tipsLbl)
+        
+        
+        
+        
+        self.tipsTriangle = UIImageView(frame: CGRect(x: -8, y: 19,width: 6.02 , height: 4))
+        self.tipsTriangle!.image = sdkManager.sdk_img(named: "Triangle")
+        
+        self.tipsTriangle!.alpha = 0
+        
+        self.addSubview(self.countDownTipsView!)
+        self.addSubview(self.tipsTriangle!)
+        
+        
+        
         
         var progressBg: UIView = UIView(frame: CGRect(x: 0, y: (46-9) * widthPercent, width: 46 * widthPercent, height: 18 * heightPercent))
         progressBg.backgroundColor = progressBarBgColor
@@ -166,13 +215,42 @@ class CountdownView : UIView{
                         self.timer = nil
                     }
           
-                    self.dismissCountdownView()
+//                    self.dismissCountdownView()
 //                    self.progressView!.setProgress(1.0, animated: true)
                     var getStr = ""
                     if LangConfig.lang[self.lang] != nil {
                         getStr = LangConfig.lang[self.lang]!["get"]!
                     }
                     self.countDownLbl!.setTitle( getStr, for: .normal)
+                    
+                    //设置结束图
+                    if self.browseIcon != nil && self.taskPageViewData != nil {
+                        
+                        if self.taskPageViewData!.endImageUrlApp.isEmpty {
+                            self.browseIcon!.setBackgroundImage(self.sdkManager.sdk_img(named: "gift"), for: .normal)
+                        } else {
+                            self.globalVm.fetchRemoteImage(self.taskPageViewData!.endImageUrlApp) { imgData in
+                                if imgData != nil {
+                                    if UIImage(data: imgData!) != nil {
+                                        self.browseIcon!.setBackgroundImage(UIImage(data: imgData!)!, for: .normal)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    //显示tips
+                    if self.countDownTipsView != nil && self.tipsTriangle != nil {
+                        self.countDownTipsView!.alpha = 1
+                        self.tipsTriangle!.alpha = 1
+                        
+                        UIView.animate(withDuration: 5, animations: {
+                            self.countDownTipsView!.alpha = 0
+                            self.tipsTriangle!.alpha = 0
+                            
+                        })
+                    }
+                    
                     
                     let query: TaskPageViewParam = TaskPageViewParam()
                     if !self.brand.isEmpty {

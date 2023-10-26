@@ -28,7 +28,7 @@ class TaskInfoVO : Codable,GBSwiftyJSONAble,Identifiable {
     var finishCountLimit: Int
     var finishStartTime: String
     var finishEndTime: String
- 
+    var finishedCount: Int
     
     var taskTargetId: Int
     var taskTargetName: String
@@ -82,6 +82,7 @@ class TaskInfoVO : Codable,GBSwiftyJSONAble,Identifiable {
         taskActivityId = ""
         targetAppUrl = ""
         targetAppPage = ""
+        finishedCount = 0
 
     }
     
@@ -121,5 +122,6 @@ class TaskInfoVO : Codable,GBSwiftyJSONAble,Identifiable {
         self.taskActivityId = jsonData["taskActivityId"].stringValue
         self.targetAppUrl = jsonData["targetAppUrl"].stringValue
         self.targetAppPage = jsonData["targetAppPage"].stringValue
+        self.finishedCount = jsonData["finishedCount"].intValue
     }
 }

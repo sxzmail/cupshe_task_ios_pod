@@ -111,7 +111,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         var popTitleTxt:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent ))
         popTitleTxt.text = LangConfig.lang[lang]!["taskPopTitle"]
         popTitleTxt.textAlignment = .center
-        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
+        popTitleTxt.font = UIFont.init(name: self.boldPath!, size: 16 * heightPercent)
        
 
         var closeBtn = SubclassedUIButton(frame: CGRect(x: screenWidth - 16 - 20 , y: 16 * heightPercent, width: 20 * heightPercent, height: 20 * heightPercent))
@@ -179,10 +179,10 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 col_icon.image = sdkManager.sdk_img(named: "progress")
 
                 var col_title:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: CGFloat(5 * heightPercent), width: (screenWidth - 32 ) - CGFloat(40 * widthPercent) - CGFloat(80 * widthPercent), height: 24 * heightPercent ))
-                col_title.text = taskInfo.taskName
+                col_title.text = taskInfo.taskName + "(" + String(format:"%d",taskInfo.finishedCount) + "/" + String(format:"%d",taskInfo.finishCountLimit) + ")"
                 col_title.textAlignment = .left
                 col_title.textColor = .black
-                col_title.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 14 * heightPercent)
+                col_title.font = UIFont.init(name: self.demiPath!, size: 14 * heightPercent)
 
 
 
@@ -213,7 +213,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 tipsLbl.textAlignment = .center
                 tipsLbl.textColor = .white
                 tipsLbl.code = "lbl_taskId_" + String(taskInfo.taskId)
-                tipsLbl.font = UIFont.init(name: "AvenirNextLTPro-Demi", size: 12 * heightPercent)
+                tipsLbl.font = UIFont.init(name: self.demiPath!, size: 12 * heightPercent)
 
                 tipsUIView.addSubview(tipsLbl)
 
@@ -247,7 +247,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 descLbl.text = taskInfo.taskDesc//"Log in daily to obtain a lottery opportunity" //
                 descLbl.textColor = task_desc_txt_color
                 descLbl.textAlignment = .left
-                descLbl.font = UIFont.init(name: "AvenirNextLTPro-Regular", size: 12 * heightPercent)
+                descLbl.font = UIFont.init(name: self.regularPath!, size: 12 * heightPercent)
 //
 //
                 row.addSubview(col_icon)
