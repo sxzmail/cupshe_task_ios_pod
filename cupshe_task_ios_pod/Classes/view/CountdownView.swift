@@ -312,6 +312,8 @@ class CountdownView : UIView{
             //发送通知
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
         }
+        
+        self.dismissCountdownView()
      
     }
     

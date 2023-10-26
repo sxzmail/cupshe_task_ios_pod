@@ -179,7 +179,11 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 col_icon.image = sdkManager.sdk_img(named: "progress")
 
                 var col_title:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: CGFloat(5 * heightPercent), width: (screenWidth - 32 ) - CGFloat(40 * widthPercent) - CGFloat(80 * widthPercent), height: 24 * heightPercent ))
-                col_title.text = taskInfo.taskName + "(" + String(format:"%d",taskInfo.finishedCount) + "/" + String(format:"%d",taskInfo.finishCountLimit) + ")"
+                if taskInfo.finishCountLimit > 1 {
+                    col_title.text = taskInfo.taskName + "(" + String(format:"%d",taskInfo.finishedCount) + "/" + String(format:"%d",taskInfo.finishCountLimit) + ")"
+                }else{
+                    col_title.text = taskInfo.taskName
+                }
                 col_title.textAlignment = .left
                 col_title.textColor = .black
                 col_title.font = UIFont.init(name: self.demiPath!, size: 14 * heightPercent)
