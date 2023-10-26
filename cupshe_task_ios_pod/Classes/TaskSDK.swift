@@ -59,7 +59,7 @@ public class TaskSDK : NSObject {
     }
     
     // 接收OC传递的Block,调用并回传数据
-    public func setCallBack(parameter:[AnyHashable : Any]){
+    public func setGetRewardCallBack(parameter:[AnyHashable : Any]){
 //        let callback = parameter["callback"]
         self.callbackBlock = parameter["callback"] as! AnyObject
         
