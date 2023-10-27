@@ -198,7 +198,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
 
 
-                var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 , y: CGFloat(5 * heightPercent), width: 6.06 * widthPercent, height: 19 * heightPercent))
+                var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: 70 , y: CGFloat(5 * heightPercent), width: 6.06 * widthPercent, height: 19 * heightPercent))
                 polygonUIView.backgroundColor = .white
                 if taskInfo.targetType == TaskType.CHECK_IN {
                     polygonUIView.code = "UIView_taskId_" + String(taskInfo.taskId)
@@ -211,7 +211,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
                 polygonUIView.addSubview(polygon_img)
 
-                var tipsUIView:TipsUIView = TipsUIView(frame: CGRect(x: screenWidth * 0.34 + CGFloat(6.06 * widthPercent), y: CGFloat(5 * heightPercent), width: 74 * widthPercent, height: 19 * heightPercent))
+                var tipsUIView:TipsUIView = TipsUIView(frame: CGRect(x: 70 + CGFloat(6.06 * widthPercent), y: CGFloat(5 * heightPercent), width: 74 * widthPercent, height: 19 * heightPercent))
                 tipsUIView.backgroundColor = tips_color
                 tipsUIView.layer.cornerRadius = 2
                 tipsUIView.layer.shadowRadius = 2

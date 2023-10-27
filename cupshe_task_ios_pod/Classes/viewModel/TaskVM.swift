@@ -274,6 +274,37 @@ class TaskVM {
         }
     }
     
+    func getTaskInfo(env:TaskEnvironment,token: String,params: TaskInfoParam, callback: @escaping (TaskInfoVO?) -> Void){
+        do{
+            HttpUtil.headers["Authorization"] = token
+            AF.request(ApiConfig.getAPIPath(env: env) + ApiConfig.API_GET_TASK_INFO,method: .post,parameters:params,encoder: JSONParameterEncoder.default,headers: HttpUtil.headers).responseJSON { res in
+                print(res)
+                switch res.result {
+                case let .success(data):
+                    var ret = JSON(data)
+                    if ret["success"].boolValue {
+                        let result = U_result<TaskInfoVO>(jsonData: JSON(ret["data"]));
+                        if result?.code == 0{
+                            var data = result?.data as! TaskInfoVO
+                            callback(data)
+                        }else{
+                            callback(nil)
+                        }
+                    }else{
+                        print(ret["retInfo"].stringValue)
+                        callback(nil)
+                    }
+                case let .failure(error):
+                    print(error)
+                    callback(nil)
+                }
+                
+            }
+        }catch let err {
+            print(err)
+        }
+    }
+    
     
     
 }

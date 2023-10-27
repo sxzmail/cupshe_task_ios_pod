@@ -17,6 +17,7 @@ class SubclassedUIButton: UIButton {
     var jumpPageUrl:String?
     var shareType:String?
     var activityId:String?
+    var userTaskId: Int?
 }
 
 //class TipsUIView: UIView{

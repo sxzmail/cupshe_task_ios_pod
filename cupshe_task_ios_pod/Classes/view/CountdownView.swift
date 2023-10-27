@@ -194,9 +194,9 @@ class CountdownView : UIView{
         
         countDownLbl!.setTitle(self.countDownSec >= 0 ? String(self.countDownSec)+"s" : LangConfig.lang[lang]!["get"], for: .normal)
 //        countDownLbl!.backgroundColor = taskInfo.canExcute ? taskBtn_normal_color : taskBtn_finish_color
-        if self.taskPageViewData!.targetValue <= 0 {
-            countDownLbl!.addTarget(self, action: #selector(doGetGift), for:.touchUpInside)
-        }
+//        if self.taskPageViewData!.targetValue <= 0 {
+//            countDownLbl!.addTarget(self, action: #selector(doGetGift), for:.touchUpInside)
+//        }
      
         
         self.addSubview(countDownLbl!)
@@ -305,7 +305,11 @@ class CountdownView : UIView{
                             
                             if self.countDownLbl != nil && self.browseIcon != nil {
                                 DispatchQueue.main.async {
+                                    self.countDownLbl!.userTaskId = userTaskProgressId
+                                    self.browseIcon!.userTaskId = userTaskProgressId
                                     self.countDownLbl!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
+                                    self.browseIcon!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
+                                    
                                 }
                             }
                             
@@ -338,12 +342,12 @@ class CountdownView : UIView{
         self.clickFlag = true
         
         if(self.notifyCallback != nil && self.env != nil){
-           
+            var userTaskId = sender.userTaskId! as Int
             //  OC的Block - >Swift的闭包,closure就是Block转化后的闭包
             typealias ClosureType = @convention(block) (String) -> Void
             let blockPtr = UnsafeRawPointer(Unmanaged<AnyObject>.passUnretained(self.notifyCallback as AnyObject).toOpaque())
             let closure = unsafeBitCast(blockPtr, to: ClosureType.self)
-            closure(ApiConfig.getRedirectUrl(env: self.env!))
+            closure(ApiConfig.getRedirectUrl(env: self.env!) + "&userTaskId=" + String(userTaskId))
         }
         self.clickFlag = false
 //        if self.env != nil {

@@ -30,6 +30,8 @@ struct ApiConfig {
     //获取分享链接地址
     public static var API_GET_SHARE_URL =  "userTask/getShareUrl"
     
+    public static var API_GET_TASK_INFO =  "userTask/getTaskInfo"
+    
     public static var API_LOGIN =  "login"
     
     
