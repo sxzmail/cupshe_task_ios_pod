@@ -12,8 +12,8 @@ import UIKit
 class TaskListView : UIView ,UIScrollViewDelegate{
 //    private var btn:SubclassedUIButton = SubclassedUIButton()
 //    private var taskIcon:SubclassedUIButton = SubclassedUIButton()
-    private var uiViewController:UIViewController?
-    private var taskShareView:TaskShareView?
+    weak private var uiViewController:UIView?
+    weak private var taskShareView:TaskShareView?
     private var brand:String = ""
     private var channel:String = ""
     private var site:String = ""
@@ -27,7 +27,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
     private var taskMaskView:UIView = UIView()
     private var popContentView:UIView = UIView()
-    private var listScrollView:UIScrollView = UIScrollView()
+    private var listScrollView:UIScrollView?
     private var empContent:UIView = UIView()
     
     private var taskVm:TaskVM = TaskVM()
@@ -62,7 +62,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     private var mediumPath:String?
     private var regularPath:String?
     
-    private var notifyCallback:AnyObject?
+    weak private var notifyCallback:AnyObject?
     
     private var opFlag:Bool = false
     
@@ -77,7 +77,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
         self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
-    public func initView(uiViewController: UIViewController,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,notifyCallback:AnyObject){
+    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,notifyCallback:AnyObject){
         self.brand = brand
         self.channel = channel
         self.site = site
@@ -132,16 +132,20 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.empContent.addSubview(empImg)
         self.empContent.alpha = 0
         
+        if self.listScrollView != nil {
+            self.listScrollView!.removeFromSuperview()
+            self.listScrollView = nil
+        }
         
         self.listScrollView = UIScrollView(frame: CGRect(x: 0, y: popTitleHeight * heightPercent, width: screenWidth, height: screenHeight * 0.5 - popTitleHeight * heightPercent))
 //        listScrollView.backgroundColor = .blue
-        self.listScrollView.isScrollEnabled = true
-        self.listScrollView.delegate = self
-        self.listScrollView.alpha = 0
+        self.listScrollView!.isScrollEnabled = true
+        self.listScrollView!.delegate = self
+        self.listScrollView!.alpha = 0
         
         self.popContentView.addSubview(popTitleView)
         self.popContentView.addSubview(self.empContent)
-        self.popContentView.addSubview(listScrollView)
+        self.popContentView.addSubview(self.listScrollView!)
        
     
         self.addSubview(popContentView)
@@ -154,7 +158,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         frame.origin.y = 0//UIScreen.main.bounds.height
 //        alertController.view.frame = frame
         self.frame = frame
-        uiViewController.view.addSubview(self)
+        uiViewController.addSubview(self)
        
     }
 
@@ -266,13 +270,14 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 row.addSubview(polygonUIView)
                 row.addSubview(tipsUIView)
                 
-                self.listScrollView.addSubview(row)
+                self.listScrollView!.addSubview(row)
             }
-            self.listScrollView.contentSize = CGSizeMake(UIScreen.main.bounds.width, CGFloat(CGFloat(countNum * 64) * heightPercent))
-            self.listScrollView.alpha = 1
+            self.listScrollView!.contentSize = CGSizeMake(UIScreen.main.bounds.width, CGFloat(CGFloat(countNum * 64) * heightPercent))
+            self.listScrollView!.alpha = 1
             
         }else{
-            self.listScrollView.removeFromSuperview()
+            self.listScrollView!.removeFromSuperview()
+            self.listScrollView = nil
             self.empContent.alpha = 1
         }
         
@@ -293,9 +298,17 @@ class TaskListView : UIView ,UIScrollViewDelegate{
             self.alpha = 0
        
             self.popContentView.frame.origin.y = self.screenHeight
-            self.removeFromSuperview()
             
-        })
+            
+        }) { flag in
+            if flag {
+                var chilrenviews = self.subviews
+                for chilren in chilrenviews {
+                      chilren.removeFromSuperview()
+                }
+                self.removeFromSuperview()
+            }
+        }
     }
     
     
@@ -350,9 +363,6 @@ class TaskListView : UIView ,UIScrollViewDelegate{
             }
         }else if type == TaskType.PAGE_VIEW {
             //浏览
-//            print(sender.taskId!)
-//            print(sender.jumpPageUrl!)
-//            print(sender.activityId!)
             var taskPageViewParam: [AnyHashable : Any] = ["taskId" : sender.taskId!, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : sender.jumpPageUrl!, "activityId": sender.activityId!]
             //发送通知
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam )
@@ -393,42 +403,43 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 //        closeCountdownView();
         if self.taskShareView != nil {
             self.taskShareView!.dismissTaskShare()
-            
+            self.taskShareView = nil
         }
     }
     
     public func showToast(taskId:Int,tipMsg:String){
 //        print(self.subviews.count)
-        
-        self.listScrollView.subviews.map { row in
-            row.subviews.map { ui in
-               
-                if ui is TipsUIView {
-                    let uiObj = ui as! TipsUIView
-                    if uiObj.code == "UIView_taskId_" + String(taskId) {
-                        
-                        ui.subviews.map { lbl in
-                            if lbl is TipsUILabel {
-                                let lblObj = lbl as! TipsUILabel
-                                if lblObj.code == "lbl_taskId_" + String(taskId) {
-                                    lblObj.text = tipMsg
+        if self.listScrollView != nil {
+            self.listScrollView!.subviews.map { row in
+                row.subviews.map { ui in
+                    
+                    if ui is TipsUIView {
+                        let uiObj = ui as! TipsUIView
+                        if uiObj.code == "UIView_taskId_" + String(taskId) {
+                            
+                            ui.subviews.map { lbl in
+                                if lbl is TipsUILabel {
+                                    let lblObj = lbl as! TipsUILabel
+                                    if lblObj.code == "lbl_taskId_" + String(taskId) {
+                                        lblObj.text = tipMsg
+                                    }
                                 }
+                                
                             }
                             
+                            
+                            ui.alpha = 1
+                            UIView.animate(withDuration: 3, animations: {
+                                
+                                ui.alpha = 0
+                                
+                            })
                         }
                         
-                        
-                        ui.alpha = 1
-                        UIView.animate(withDuration: 3, animations: {
-                          
-                            ui.alpha = 0
-                            
-                        })
                     }
-                   
                 }
+                
             }
-            
         }
     }
  

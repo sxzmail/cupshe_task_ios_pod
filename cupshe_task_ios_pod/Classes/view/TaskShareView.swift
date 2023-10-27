@@ -70,7 +70,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         self.mediumPath = fontManager.getMediumFontPath(for: TaskShareView.self)
 //        self.regularPath = fontManager.getrRegularFontPath(for: TaskShareView.self)
     }
-    public func initView(uiViewController: UIViewController,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId: String,taskId: Int,env:TaskEnvironment){
+    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId: String,taskId: Int,env:TaskEnvironment){
         
         self.brand = brand
         self.channel = channel
@@ -230,7 +230,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         frame.origin.y = 0//UIScreen.main.bounds.height
 //        alertController.view.frame = frame
         self.frame = frame
-        uiViewController.view.addSubview(self)
+        uiViewController.addSubview(self)
        
     }
 
@@ -256,8 +256,17 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
             self.alpha = 0
 //            print(self.frame.size.height)
             self.popContentView.frame.origin.y = self.screenHeight
-            self.removeFromSuperview()
-        })
+            
+        }) { flag in
+            if flag {
+                var chilrenviews = self.subviews
+                for chilren in chilrenviews {
+                      chilren.removeFromSuperview()
+                }
+                self.removeFromSuperview()
+            }
+            
+        }
     }
     
     

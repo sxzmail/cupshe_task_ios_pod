@@ -12,6 +12,7 @@ import UIKit
 public class TaskSDK : NSObject {
     
 //    public static let instance = TaskSDK()
+    weak private var uiContextHanlder: UIView?
     
     private var token: String = ""
     private var brand: String = ""
@@ -20,11 +21,12 @@ public class TaskSDK : NSObject {
     private var terminal: String = ""
     private var lang: String = ""
     private var activityId: String = ""
-    private var uiContextHanlder: UIViewController?
+    
     private var env:TaskEnvironment = TaskEnvironment.TEST
     
-    private var countDownView : CountdownView?
-    private var taskListView : TaskListView?
+    weak private var countDownView : CountdownView?
+    weak private var taskListView : TaskListView?
+    weak private var taskShareView: TaskShareView?
 //    private var taskShareView : TaskShareView?
     
     private var taskVm: TaskVM = TaskVM()
@@ -35,7 +37,7 @@ public class TaskSDK : NSObject {
     
     private var clickListFlag: Bool = false
     
-    public init(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIViewController){
+    public init(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIView){
         super.init()
         self.token = token
         self.brand = brand
@@ -93,7 +95,7 @@ public class TaskSDK : NSObject {
         self.activityId = activityId
     }
     
-    public func setUiContextHanlder(uiContextHanlder: UIViewController){
+    public func setUiContextHanlder(uiContextHanlder: UIView){
         self.uiContextHanlder = uiContextHanlder
     }
     
@@ -126,6 +128,17 @@ public class TaskSDK : NSObject {
         if self.taskListView != nil {
             self.taskListView!.dismissTaskList()
             self.taskListView = nil
+        }
+        
+        if self.taskShareView != nil {
+            self.taskShareView!.dismissTaskShare()
+            self.taskShareView = nil
+        }
+        
+        if self.uiContextHanlder != nil {
+            self.uiContextHanlder!.removeFromSuperview()
+            self.uiContextHanlder = nil
+            
         }
 //        closeCountdownView();
     }
@@ -170,9 +183,14 @@ public class TaskSDK : NSObject {
 
                 
                 if taskList != nil && taskList!.count > 0 {
+                    
+                    if self.taskListView != nil {
+                        self.taskListView!.dismissTaskList()
+                        self.taskListView = nil
+                    }
 //                    print(taskList)
 //                    if self.taskListView == nil {
-                        self.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                    self.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                         
                     self.taskListView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,notifyCallback:self.callbackBlock!)
 //                    }
@@ -320,10 +338,14 @@ public class TaskSDK : NSObject {
         }else if type == TaskType.SHARE {
             //分享
             if self.uiContextHanlder != nil {
-                var taskShareView: TaskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                if self.taskShareView != nil {
+                    self.taskShareView!.dismissTaskShare()
+                    self.taskShareView = nil
+                }
+                self.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                 
-                taskShareView.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env)
-                taskShareView.showView()
+                self.taskShareView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env)
+                self.taskShareView!.showView()
             }
 
         }

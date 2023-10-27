@@ -51,9 +51,9 @@ class CountdownView : UIView{
     private var proressPercentVal:Float = 0.0
     private var taskPageViewData:TaskPageViewVO?
     
-    private var progressView: GradientProgressView?
-    private var countDownLbl:SubclassedUIButton?
-    private var browseIcon:SubclassedUIButton?
+    weak private var progressView: GradientProgressView?
+    weak private var countDownLbl:SubclassedUIButton?
+    weak private var browseIcon:SubclassedUIButton?
     private var countDownTipsView: UIView?
     private var tipsTriangle:UIImageView?
     
@@ -63,7 +63,7 @@ class CountdownView : UIView{
     private var boldPath:String?
     private var demiPath:String?
     
-    private var notifyCallback:AnyObject?
+    weak private var notifyCallback:AnyObject?
     private var clickFlag: Bool = false
     
 //    private var mediumPath:String?
@@ -84,7 +84,7 @@ class CountdownView : UIView{
 //        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
 
-    public func showView(uiViewController: UIViewController,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment,activityId:String,notifyCallback:AnyObject){
+    public func showView(uiViewController: UIView,token:String,brand:String,channel:String,site:String,terminal:String,lang: String,data:TaskPageViewVO,env:TaskEnvironment,activityId:String,notifyCallback:AnyObject){
         self.activityId = activityId
         self.env = env
         self.taskPageViewData = data
@@ -126,8 +126,11 @@ class CountdownView : UIView{
             }
         }
         self.addSubview(self.browseIcon!)
-        
-        
+//
+//        if self.taskPageViewData!.targetValue <= 0 {
+//            self.browseIcon!.addTarget(self, action: #selector(doGetGift), for:.touchUpInside)
+//        }
+//
         countDownTipsView = UIView(frame: CGRect(x:  -160, y: 8, width: 152, height: 27))
         self.countDownTipsView!.backgroundColor = tipsBgColor
         self.countDownTipsView?.layer.cornerRadius = 5
@@ -209,7 +212,7 @@ class CountdownView : UIView{
 //        print(self.frame.size.height)
         
         progressView!.setProgress(0.0, animated: true)
-        uiViewController.view.addSubview(self)
+        uiViewController.addSubview(self)
         
         initTimer()
         timer!.activate()
@@ -231,8 +234,9 @@ class CountdownView : UIView{
             DispatchQueue.main.async {
          
                 self.proressPercentVal = Float(self.taskPageViewData!.targetValue - self.countDownSec) / Float(self.taskPageViewData!.targetValue)
-          
-                self.progressView!.setProgress(self.proressPercentVal, animated: true)
+                if self.progressView != nil {
+                    self.progressView!.setProgress(self.proressPercentVal, animated: true)
+                }
                 if  self.countDownSec <= 0 {
                     if self.timer != nil {
                         self.timer!.cancel()
@@ -245,26 +249,9 @@ class CountdownView : UIView{
                     if LangConfig.lang[self.lang] != nil {
                         getStr = LangConfig.lang[self.lang]!["get"]!
                     }
-                    self.countDownLbl!.setTitle( getStr, for: .normal)
                     
-                    //设置结束图
-                    if self.browseIcon != nil && self.taskPageViewData != nil {
-                        DispatchQueue.main.async {
-                            self.browseIcon!.setBackgroundImage(self.endImg!, for: .normal)
-                        }
-                        
-                    }
-                    
-                    //显示tips
-                    if self.countDownTipsView != nil && self.tipsTriangle != nil {
-                        self.countDownTipsView!.alpha = 1
-                        self.tipsTriangle!.alpha = 1
-                        
-                        UIView.animate(withDuration: 5, animations: {
-                            self.countDownTipsView!.alpha = 0
-                            self.tipsTriangle!.alpha = 0
-                            
-                        })
+                    if self.countDownLbl != nil {
+                        self.countDownLbl!.setTitle( getStr, for: .normal)
                     }
                     
                     
@@ -291,24 +278,45 @@ class CountdownView : UIView{
                     self.taskVm.stopPageViewTask(env:self.env!,token: self.token, params: query) { userTaskProgressId in
                         if userTaskProgressId != nil {
                             //完成任务
+                            //设置结束图
+                            if self.browseIcon != nil && self.taskPageViewData != nil {
+                                DispatchQueue.main.async {
+                                    self.browseIcon!.setBackgroundImage(self.endImg!, for: .normal)
+                                }
+                                
+                            }
+                            
+                            //显示tips
+                            if self.countDownTipsView != nil && self.tipsTriangle != nil {
+                                self.countDownTipsView!.alpha = 1
+                                self.tipsTriangle!.alpha = 1
+                                
+                                UIView.animate(withDuration: 5, animations: {
+                                    if self.countDownTipsView != nil && self.tipsTriangle != nil {
+                                        DispatchQueue.main.async {
+                                            self.countDownTipsView!.alpha = 0
+                                            self.tipsTriangle!.alpha = 0
+                                        }
+                                    }
+                                    
+                                })
+                            }
+                            
+                            
+                            if self.countDownLbl != nil && self.browseIcon != nil {
+                                DispatchQueue.main.async {
+                                    self.countDownLbl!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
+                                }
+                            }
+                            
                         }
                     }
                     
                     
-                    if self.countDownLbl != nil {
-                        self.countDownLbl!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
-                    }
+                    
                    
                 }else{
-                    
-    //                self.proressPercentVal = Float(self.taskPageViewData!.targetValue - self.countDownSec) * self.baseProgressVal / Float(self.taskPageViewData!.targetValue)
-                    
-                    
-//                    var getStr = ""
-//                    if LangConfig.lang[self.lang] != nil {
-//                        getStr = LangConfig.lang[self.lang]!["get"]!
-//                    }
-    //                self.countDownLbl!.setTitle( self.countDownSec > 0 ? String(self.countDownSec) : getStr, for: .normal)
+       
                     self.countDownLbl!.setTitle(  String(self.countDownSec) , for: .normal)
                     
                     self.countDownSec -= 1
@@ -353,6 +361,11 @@ class CountdownView : UIView{
         if timer != nil {
             timer?.cancel()
             timer = nil
+        }
+        
+        var chilrenviews = self.subviews
+        for chilren in chilrenviews {
+              chilren.removeFromSuperview()
         }
         self.removeFromSuperview()
     }
