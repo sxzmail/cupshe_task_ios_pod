@@ -51,9 +51,9 @@ class CountdownView : UIView{
     private var proressPercentVal:Float = 0.0
     private var taskPageViewData:TaskPageViewVO?
     
-    weak private var progressView: GradientProgressView?
-    weak private var countDownLbl:SubclassedUIButton?
-    weak private var browseIcon:SubclassedUIButton?
+    private var progressView: GradientProgressView?
+    private var countDownLbl:SubclassedUIButton?
+    private var browseIcon:SubclassedUIButton?
     private var countDownTipsView: UIView?
     private var tipsTriangle:UIImageView?
     
@@ -63,7 +63,7 @@ class CountdownView : UIView{
     private var boldPath:String?
     private var demiPath:String?
     
-    weak private var notifyCallback:AnyObject?
+    private var notifyCallback:AnyObject?
     private var clickFlag: Bool = false
     
 //    private var mediumPath:String?

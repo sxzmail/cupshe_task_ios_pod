@@ -13,7 +13,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 //    private var btn:SubclassedUIButton = SubclassedUIButton()
 //    private var taskIcon:SubclassedUIButton = SubclassedUIButton()
     weak private var uiViewController:UIView?
-    weak private var taskShareView:TaskShareView?
+    private var taskShareView:TaskShareView?
     private var brand:String = ""
     private var channel:String = ""
     private var site:String = ""
@@ -62,7 +62,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     private var mediumPath:String?
     private var regularPath:String?
     
-    weak private var notifyCallback:AnyObject?
+    private var notifyCallback:AnyObject?
     
     private var opFlag:Bool = false
     

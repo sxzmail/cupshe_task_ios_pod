@@ -24,9 +24,9 @@ public class TaskSDK : NSObject {
     
     private var env:TaskEnvironment = TaskEnvironment.TEST
     
-    weak private var countDownView : CountdownView?
-    weak private var taskListView : TaskListView?
-    weak private var taskShareView: TaskShareView?
+    private var countDownView : CountdownView?
+    private var taskListView : TaskListView?
+    private var taskShareView: TaskShareView?
 //    private var taskShareView : TaskShareView?
     
     private var taskVm: TaskVM = TaskVM()

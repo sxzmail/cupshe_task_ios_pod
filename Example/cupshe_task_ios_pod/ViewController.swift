@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         var sdk = TaskSDK(token:"a50327ffd330593cfc395d34da838dc4",brand:"1",channel:"1",site:"1",terminal:"2", lang:"en-GB",activityId:"44F3DD326696447D260612C6BD37B5E7")
-        sdk.setUiContextHanlder(uiContextHanlder: self)
+        sdk.setUiContextHanlder(uiContextHanlder: self.view)
         sdk.setTaskEnvironment(env: TaskEnvironment.TEST)
         sdk.showTaskList()
         
