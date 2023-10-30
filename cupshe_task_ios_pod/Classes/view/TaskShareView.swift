@@ -148,11 +148,11 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
             
             var insBtn = SubclassedUIButton(frame: CGRect(x: ((screenWidth * 0.3) - CGFloat(32 * widthPercent)) * 0.5, y: 0, width: 32 * heightPercent, height: 32 * heightPercent))
             insBtn.setBackgroundImage(SdkManager().sdk_img(named: "instagram"), for: .normal)
-            insBtn.shareType = "Instagram"
+            insBtn.shareType = "ins"
             insBtn.addTarget(self, action: #selector(shareOp), for:.touchUpInside)
             
             var insLbl:UILabel = UILabel(frame: CGRect(x: 0, y: CGFloat(35 * widthPercent), width: (screenWidth * 0.3), height: 15 * heightPercent ))
-            insLbl.text = "Ins"
+            insLbl.text = "Instagram"
             insLbl.textAlignment = .center
             
             //        insLbl.font = UIFont.init(name: "AvenirNextLTPro-Medium", size: 12 * heightPercent)
