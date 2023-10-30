@@ -63,6 +63,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     private var regularPath:String?
     
     private var callback:(( [AnyHashable : Any]) -> Void)?
+    private var shareCallBack:(( [AnyHashable : Any]) -> Void)?
     
     private var opFlag:Bool = false
     
@@ -77,7 +78,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
         self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
-    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,callbackFunc:(( [AnyHashable : Any]) -> Void)?){
+    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,callbackFunc:(( [AnyHashable : Any]) -> Void)?,shareCallBackFunc:(( [AnyHashable : Any]) -> Void)?){
         self.brand = brand
         self.channel = channel
         self.site = site
@@ -88,6 +89,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.uiViewController = uiViewController
         self.env = env
         self.callback = callbackFunc
+        self.shareCallBack = shareCallBackFunc
         
         widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
         heightPercent = 1.0 //screenHeight / ScreenConfig.baseHeight
@@ -392,7 +394,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
             if self.taskShareView == nil {
                 self.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
-                self.taskShareView!.initView(uiViewController: self.uiViewController!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env!)
+                self.taskShareView!.initView(uiViewController: self.uiViewController!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env!,notifyCallbacdk:self.shareCallBack!)
             }
 
 

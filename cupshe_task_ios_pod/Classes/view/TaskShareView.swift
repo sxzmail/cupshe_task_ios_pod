@@ -58,6 +58,8 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
 //    private var regularPath:String?
     
     private var clickFlag: Bool = false
+    
+    private var shareCallBack:(( [AnyHashable : Any]) -> Void)?
 
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -70,7 +72,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         self.mediumPath = fontManager.getMediumFontPath(for: TaskShareView.self)
 //        self.regularPath = fontManager.getrRegularFontPath(for: TaskShareView.self)
     }
-    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId: String,taskId: Int,env:TaskEnvironment){
+    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId: String,taskId: Int,env:TaskEnvironment,notifyCallbacdk:(( [AnyHashable : Any]) -> Void)?){
         
         self.brand = brand
         self.channel = channel
@@ -81,7 +83,7 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
         self.activityId = activityId
         self.taskId = taskId
         self.env = env
-        
+        self.shareCallBack = notifyCallbacdk
         widthPercent = screenWidth / ScreenConfig.baseWidth
         heightPercent = screenHeight / ScreenConfig.baseHeight
 
@@ -311,7 +313,10 @@ class TaskShareView : UIView ,UIScrollViewDelegate{
                 
                 var taskNotice: [AnyHashable : Any] = ["shareUrl" : shareUrl, "type": shareType]
                 //发送通知
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_userShare"), object: nil, userInfo:taskNotice )
+                if self.shareCallBack != nil {
+                    self.shareCallBack!(taskNotice)
+                }
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_userShare"), object: nil, userInfo:taskNotice )
             
             }
             

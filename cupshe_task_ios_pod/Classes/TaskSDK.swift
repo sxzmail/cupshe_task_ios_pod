@@ -39,6 +39,8 @@ public class TaskSDK : NSObject {
     
     private var goBrowsCallBack:(( [AnyHashable : Any]) -> Void)?
     
+    private var shareCallBack:(( [AnyHashable : Any]) -> Void)?
+    
     private var clickListFlag: Bool = false
     
     
@@ -82,6 +84,12 @@ public class TaskSDK : NSObject {
     public func setGoBrowsCallback(completion: @escaping (( [AnyHashable : Any] ) -> Void)){
 //        let callback = parameter["callback"]
         self.goBrowsCallBack = completion
+        
+    }
+    
+    public func setShareCallback(completion: @escaping (( [AnyHashable : Any] ) -> Void)){
+        //        let callback = parameter["callback"]
+        self.shareCallBack = completion
         
     }
     
@@ -196,7 +204,7 @@ public class TaskSDK : NSObject {
 //                    if self.taskListView == nil {
                 self.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                     
-                self.taskListView!.initView(uiViewController: uiContextHanlder, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,callbackFunc:self.goBrowsCallBack!)
+                self.taskListView!.initView(uiViewController: uiContextHanlder, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,callbackFunc:self.goBrowsCallBack!,shareCallBackFunc:self.shareCallBack!)
 //                    }
                 
                 self.taskListView!.setListData(taskList: taskList!)
@@ -333,7 +341,7 @@ public class TaskSDK : NSObject {
                         }
                         self.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                         
-                        self.taskShareView!.initView(uiViewController: uiContextHanlder, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env)
+                        self.taskShareView!.initView(uiViewController: uiContextHanlder, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env,notifyCallbacdk: self.shareCallBack!)
                         self.taskShareView!.showView()
                         
 
