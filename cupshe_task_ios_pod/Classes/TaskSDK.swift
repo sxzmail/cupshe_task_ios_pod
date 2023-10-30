@@ -58,7 +58,7 @@ public class TaskSDK : NSObject {
     
     
     
-    @objc init(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String) {
+     public init(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String) {
        super.init()
        self.token = token
         self.brand = brand
