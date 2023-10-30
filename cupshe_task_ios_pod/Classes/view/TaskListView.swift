@@ -10,29 +10,13 @@ import UIKit
 
 //@objcMembers
 class TaskListView : UIView ,UIScrollViewDelegate{
-//    private var btn:SubclassedUIButton = SubclassedUIButton()
-//    private var taskIcon:SubclassedUIButton = SubclassedUIButton()
-    weak private var uiViewController:UIView?
-    private var taskShareView:TaskShareView?
-    private var brand:String = ""
-    private var channel:String = ""
-    private var site:String = ""
-    private var terminal:String = ""
-    private var token:String = ""
-    private var lang:String = ""
-    private var activityId: String = ""
-    private var env:TaskEnvironment?
+
     private var listData:[TaskInfoVO]?
     
-
-    private var taskMaskView:UIView = UIView()
     private var popContentView:UIView = UIView()
     private var listScrollView:UIScrollView?
     private var empContent:UIView = UIView()
     
-    private var taskVm:TaskVM = TaskVM()
-    private var sdkManager:SdkManager = SdkManager()
-    private var fontManager:FontManager = FontManager()
     
     private var screenWidth:CGFloat = UIScreen.main.bounds.width
     private var screenHeight:CGFloat = UIScreen.main.bounds.height
@@ -62,7 +46,6 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     private var mediumPath:String?
     private var regularPath:String?
     
-    private var notifyCallback:AnyObject?
     
     private var opFlag:Bool = false
     
@@ -72,93 +55,85 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     override init(frame: CGRect){
         super.init(frame: frame)
 //        fontManager.regCustomFont(for: TaskListView.self)
-        self.boldPath = fontManager.getBoldFontPath(for: TaskListView.self)
-        self.demiPath = fontManager.getDemiFontPath(for: TaskListView.self)
-        self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
-        self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
+        self.boldPath = FontManager().getBoldFontPath(for: TaskListView.self)
+        self.demiPath =  FontManager().getDemiFontPath(for: TaskListView.self)
+        self.mediumPath =  FontManager().getMediumFontPath(for: TaskListView.self)
+        self.regularPath =  FontManager().getrRegularFontPath(for: TaskListView.self)
     }
-    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,notifyCallback:AnyObject){
-        self.brand = brand
-        self.channel = channel
-        self.site = site
-        self.terminal = terminal
-        self.token = token
-        self.lang = lang
-        self.activityId = activityId
-        self.uiViewController = uiViewController
-        self.env = env
-        self.notifyCallback = notifyCallback
-        
+    public func initView(){
+        self.alpha = 0
         widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
         heightPercent = 1.0 //screenHeight / ScreenConfig.baseHeight
         
-        
-        self.alpha = 0
-        
-        self.taskMaskView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.taskMaskView.backgroundColor = .black
-        self.taskMaskView.alpha = 0.5
-//        self.taskMaskView.addGestureRecognizer(UIGestureRecognizer.init(target: self, action: #selector(dismissTaskList)))
-        self.addSubview(self.taskMaskView)
-        
-        self.popContentView = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: screenHeight * 0.5))
-        popContentView.backgroundColor = .white
-        
-    
-        
-        var popTitleView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent))
-        popTitleView.backgroundColor = .white
-//        popTitleView.layer.cornerRadius = 3
-        popTitleView.layer.borderColor = line_color
-        popTitleView.layer.borderWidth = 1
-
-        var popTitleTxt:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent ))
-        popTitleTxt.text = LangConfig.lang[lang]!["taskPopTitle"]
-        popTitleTxt.textAlignment = .center
-        popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
-       
-
-        var closeBtn = SubclassedUIButton(frame: CGRect(x: screenWidth - 16 - 20 , y: 16 * heightPercent, width: 20 * heightPercent, height: 20 * heightPercent))
-        closeBtn.setBackgroundImage(sdkManager.sdk_img(named: "close"), for: .normal)
-        closeBtn.addTarget(self, action: #selector(dismissTaskList), for:.touchUpInside)
-        
-        popTitleView.addSubview(popTitleTxt)
-        popTitleView.addSubview(closeBtn)
-        
-        
-        self.empContent = UIView(frame: CGRect(x: 0, y: popTitleHeight * heightPercent, width: screenWidth, height: screenHeight * 0.5 - popTitleHeight * heightPercent))
-        var empImg:UIImageView = UIImageView(frame: CGRect(x: CGFloat(screenWidth - 160 * widthPercent) * 0.5, y: CGFloat(screenHeight * 0.5 - popTitleHeight * heightPercent - 160) * 0.5, width: CGFloat(160 * widthPercent), height: CGFloat(160 * widthPercent)))
-        empImg.image = sdkManager.sdk_img(named: "emptyimg")
-        self.empContent.addSubview(empImg)
-        self.empContent.alpha = 0
-        
-        if self.listScrollView != nil {
-            self.listScrollView!.removeFromSuperview()
-            self.listScrollView = nil
+        if TaskSDK.getUiContextFunc() != nil {
+            
+            
+            
+            var taskMaskView =  UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            taskMaskView.backgroundColor = .black
+            taskMaskView.alpha = 0.5
+            taskMaskView.addGestureRecognizer(UIGestureRecognizer.init(target: self, action: #selector(dismissTaskList)))
+            self.addSubview(taskMaskView)
+            
+            self.popContentView = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: screenHeight * 0.5))
+            popContentView.backgroundColor = .white
+            
+            
+            
+            var popTitleView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent))
+            popTitleView.backgroundColor = .white
+            //        popTitleView.layer.cornerRadius = 3
+            popTitleView.layer.borderColor = line_color
+            popTitleView.layer.borderWidth = 1
+            
+            var popTitleTxt:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: popTitleWidth, height: popTitleHeight * heightPercent ))
+            popTitleTxt.text = LangConfig.lang[TaskENV.lang]!["taskPopTitle"]
+            popTitleTxt.textAlignment = .center
+            popTitleTxt.font = UIFont.init(name: "AvenirNextLTPro-Bold", size: 16 * heightPercent)
+            
+            
+            var closeBtn = SubclassedUIButton(frame: CGRect(x: screenWidth - 16 - 20 , y: 16 * heightPercent, width: 20 * heightPercent, height: 20 * heightPercent))
+            closeBtn.setBackgroundImage(SdkManager().sdk_img(named: "close"), for: .normal)
+            closeBtn.addTarget(self, action: #selector(dismissTaskList), for:.touchUpInside)
+            
+            popTitleView.addSubview(popTitleTxt)
+            popTitleView.addSubview(closeBtn)
+            
+            
+            self.empContent = UIView(frame: CGRect(x: 0, y: popTitleHeight * heightPercent, width: screenWidth, height: screenHeight * 0.5 - popTitleHeight * heightPercent))
+            var empImg:UIImageView = UIImageView(frame: CGRect(x: CGFloat(screenWidth - 160 * widthPercent) * 0.5, y: CGFloat(screenHeight * 0.5 - popTitleHeight * heightPercent - 160) * 0.5, width: CGFloat(160 * widthPercent), height: CGFloat(160 * widthPercent)))
+            empImg.image = SdkManager().sdk_img(named: "emptyimg")
+            self.empContent.addSubview(empImg)
+            self.empContent.alpha = 0
+            
+            if self.listScrollView != nil {
+                self.listScrollView!.removeFromSuperview()
+                self.listScrollView = nil
+            }
+            
+            self.listScrollView = UIScrollView(frame: CGRect(x: 0, y: popTitleHeight * heightPercent, width: screenWidth, height: screenHeight * 0.5 - popTitleHeight * heightPercent))
+            //        listScrollView.backgroundColor = .blue
+            self.listScrollView!.isScrollEnabled = true
+            self.listScrollView!.delegate = self
+            self.listScrollView!.alpha = 0
+            
+            self.popContentView.addSubview(popTitleView)
+            self.popContentView.addSubview(self.empContent)
+            self.popContentView.addSubview(self.listScrollView!)
+            
+            
+            self.addSubview(popContentView)
+            
+            
+            var frame:CGRect = self.frame
+            frame.size.width = UIScreen.main.bounds.width
+            frame.size.height = UIScreen.main.bounds.height
+            frame.origin.x = 0
+            frame.origin.y = 0//UIScreen.main.bounds.height
+            //        alertController.view.frame = frame
+            self.frame = frame
+            TaskSDK.getUiContextFunc()!.addSubview(self)
         }
-        
-        self.listScrollView = UIScrollView(frame: CGRect(x: 0, y: popTitleHeight * heightPercent, width: screenWidth, height: screenHeight * 0.5 - popTitleHeight * heightPercent))
-//        listScrollView.backgroundColor = .blue
-        self.listScrollView!.isScrollEnabled = true
-        self.listScrollView!.delegate = self
-        self.listScrollView!.alpha = 0
-        
-        self.popContentView.addSubview(popTitleView)
-        self.popContentView.addSubview(self.empContent)
-        self.popContentView.addSubview(self.listScrollView!)
-       
-    
-        self.addSubview(popContentView)
-
-
-        var frame:CGRect = self.frame
-        frame.size.width = UIScreen.main.bounds.width
-        frame.size.height = UIScreen.main.bounds.height
-        frame.origin.x = 0
-        frame.origin.y = 0//UIScreen.main.bounds.height
-//        alertController.view.frame = frame
-        self.frame = frame
-        uiViewController.addSubview(self)
        
     }
 
@@ -184,7 +159,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 
                 
                 var col_icon:UIImageView = UIImageView(frame: CGRect(x: 0, y: CGFloat(14 * heightPercent), width: CGFloat(32 * widthPercent), height: CGFloat(32 * heightPercent)))
-                col_icon.image = sdkManager.sdk_img(named: "progress")
+                col_icon.image = SdkManager().sdk_img(named: "progress")
 
                 var col_title:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: CGFloat(5 * heightPercent), width: (screenWidth - 32 ) - CGFloat(40 * widthPercent) - CGFloat(80 * widthPercent), height: 24 * heightPercent ))
                 if taskInfo.finishCountLimit > 1 {
@@ -207,7 +182,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 polygonUIView.alpha = 0
 
                 var polygon_img:UIImageView = UIImageView(frame: CGRect(x: 0, y: (19 - 4.25) * heightPercent * 0.5, width: CGFloat(6.06 * widthPercent), height: CGFloat(4.25 * widthPercent)))
-                polygon_img.image = sdkManager.sdk_img(named: "polygon")
+                polygon_img.image = SdkManager().sdk_img(named: "polygon")
 
                 polygonUIView.addSubview(polygon_img)
 
@@ -242,15 +217,15 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
                 if taskInfo.targetType == TaskType.CHECK_IN {
 
-                    oprateBtn.setTitle(LangConfig.lang[lang]!["checkIn"], for: .normal)
+                    oprateBtn.setTitle(LangConfig.lang[TaskENV.lang]!["checkIn"], for: .normal)
                 }else if taskInfo.targetType == TaskType.PAGE_VIEW {
                     oprateBtn.activityId = taskInfo.taskActivityId
-                    oprateBtn.setTitle(LangConfig.lang[lang]!["go"], for: .normal)
+                    oprateBtn.setTitle(LangConfig.lang[TaskENV.lang]!["go"], for: .normal)
                     oprateBtn.jumpPageUrl = taskInfo.targetAppUrl
 
                 }else if taskInfo.targetType == TaskType.SHARE {
 
-                    oprateBtn.setTitle(LangConfig.lang[lang]!["share"], for: .normal)
+                    oprateBtn.setTitle(LangConfig.lang[TaskENV.lang]!["share"], for: .normal)
                 }
 
 
@@ -307,6 +282,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                       chilren.removeFromSuperview()
                 }
                 self.removeFromSuperview()
+                TaskSDK.taskListView = nil
             }
         }
     }
@@ -324,34 +300,34 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
             let query: TaskCheckInParam = TaskCheckInParam()
             query.actionId = TaskType.CHECK_IN
-            query.token = self.token
-            if !self.brand.isEmpty {
-                query.brandId = brand
+            query.token = TaskENV.token
+            if !TaskENV.brand.isEmpty {
+                query.brandId = TaskENV.brand
             }
-            if !self.channel.isEmpty {
-                query.channelId = channel
+            if !TaskENV.channel.isEmpty {
+                query.channelId = TaskENV.channel
             }
-            if !self.site.isEmpty {
-                query.siteId = site
+            if !TaskENV.site.isEmpty {
+                query.siteId = TaskENV.site
             }
-            if !self.terminal.isEmpty {
-                query.terminalId = terminal
+            if !TaskENV.terminal.isEmpty {
+                query.terminalId = TaskENV.terminal
             }
-            if !self.lang.isEmpty {
-                query.appLangCode = self.lang
+            if !TaskENV.lang.isEmpty {
+                query.appLangCode = TaskENV.lang
             }
             if taskId != nil && taskId > 0 {
                 query.taskId  = taskId
             }
 
 //        brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, lang: self.lang
-            self.taskVm.taskCheckIn(env:self.env!,token: self.token, params: query) { lst in
+            TaskVM().taskCheckIn(env:TaskENV.env,token: TaskENV.token, params: query) { lst in
 
 
                 if lst != nil && lst!.count > 0 {
                     //签到成功
                     let userTaskProgressInfo:UserTaskProgress = lst![0] as UserTaskProgress
-                    self.showToast(taskId: sender.taskId!,tipMsg:LangConfig.lang[self.lang]!["Chances"]! + " +1")
+                    self.showToast(taskId: sender.taskId!,tipMsg:LangConfig.lang[TaskENV.lang]!["Chances"]! + " +1")
                     if userTaskProgressInfo.status == 2 || userTaskProgressInfo.status == 3 {
                         sender.backgroundColor = self.taskBtn_finish_color
                         sender.removeTarget(self, action: nil, for:.touchUpInside)
@@ -373,37 +349,19 @@ class TaskListView : UIView ,UIScrollViewDelegate{
             //分享
             self.opFlag = false
             self.dismissTaskList()
-            self.showShareView(taskId: taskId)
+            TaskSDK.showShareView(taskId: taskId)
 
         }
     
     }
-    
    
-
-    
-    public func showShareView(taskId:Int){
-        if self.uiViewController != nil {
-        
-            if self.taskShareView == nil {
-                self.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-
-                self.taskShareView!.initView(uiViewController: self.uiViewController!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env!)
-            }
-
-
-            self.taskShareView!.showView()
-        }
-
-    }
-    
     
     public func closeShareView(){
         
 //        closeCountdownView();
-        if self.taskShareView != nil {
-            self.taskShareView!.dismissTaskShare()
-            self.taskShareView = nil
+        if TaskSDK.taskShareView != nil {
+            TaskSDK.taskShareView!.dismissTaskShare()
+            
         }
     }
     
