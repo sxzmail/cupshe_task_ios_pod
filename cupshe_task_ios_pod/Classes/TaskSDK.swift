@@ -8,157 +8,198 @@
 import Foundation
 import UIKit
 
-@objcMembers
-public class TaskENV : NSObject {
-    public static var token: String = ""
-    public static var brand: String = ""
-    public static var channel: String = ""
-    public static var site: String = ""
-    public static var terminal: String = ""
-    public static var lang: String = ""
-    public static var activityId: String = ""
-    public static var env:TaskEnvironment = TaskEnvironment.TEST
-    public static var getRewardCallBack:AnyObject?
-    public static var uiContextHanlderArr: WeakArray<UIView>?
 
-}
 
 @objcMembers
 public class TaskSDK : NSObject {
 
+//    public static let instance = TaskSDK()
+    weak private var uiContextHanlder: UIView?
     
-    static var countDownView : CountdownView?
-    static var taskListView : TaskListView?
-    static var taskShareView: TaskShareView?
-
+    private var token: String = ""
+    private var brand: String = ""
+    private var channel: String = ""
+    private var site: String = ""
+    private var terminal: String = ""
+    private var lang: String = ""
+    private var activityId: String = ""
     
-    public static func setEnv(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String){
-        TaskENV.token = token
-        TaskENV.brand = brand
-        TaskENV.channel = channel
-        TaskENV.site = site
-        TaskENV.terminal = terminal
-        TaskENV.lang = lang
-        TaskENV.activityId = activityId
-//        acceptDataWithClosure()
+    private var env:TaskEnvironment = TaskEnvironment.TEST
+    
+    private var countDownView : CountdownView?
+    private var taskListView : TaskListView?
+    private var taskShareView: TaskShareView?
+//    private var taskShareView : TaskShareView?
+    
+    private var taskVm: TaskVM = TaskVM()
+    
+    private var userTaskId:Int = 0
+    
+    private var callbackBlock: ((String) -> Void)?
+    
+    private var goBrowsCallBack:(( [AnyHashable : Any]) -> Void)?
+    
+    private var clickListFlag: Bool = false
+    
+    
+    
+    public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIView) -> TaskSDK{
+        
+        self.token = token
+        self.brand = brand
+        self.channel = channel
+        self.site = site
+        self.terminal = terminal
+        self.lang = lang
+        self.uiContextHanlder = uiContextHanlder
+        self.activityId = activityId
+        return self
+    }
+    
+    public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String) -> TaskSDK{
+        self.token = token
+        self.brand = brand
+        self.channel = channel
+        self.site = site
+        self.terminal = terminal
+        self.lang = lang
+        self.activityId = activityId
+        return self
     }
     
     // 接收OC传递的Block,调用并回传数据
-    public static func setGetRewardCallBack(parameter:[AnyHashable : Any]){
+    @objc func setGetRewardCallBack(completion : @escaping ((String) -> Void)) {
 //        let callback = parameter["callback"]
-        TaskENV.getRewardCallBack = parameter["callback"] as! AnyObject
+        self.callbackBlock = completion;
+//        self.callbackBlock = parameter["callback"] as! AnyObject
         
     }
     
-    public static func setToken(token:String){
-        TaskENV.token = token
-    }
-
-    public static func setBrand(brand:String){
-        TaskENV.brand = brand
-    }
-
-    public static func setChannel(channel:String){
-        TaskENV.channel = channel
-    }
-
-    public static func setSite(site:String){
-        TaskENV.site = site
-    }
-
-    public static func setTerminal(terminal:String){
-        TaskENV.terminal = terminal
-    }
-
-    public static func setLang(lang:String){
-        TaskENV.lang = lang
-    }
-
-    public static func setActivityId(activityId:String){
-        TaskENV.activityId = activityId
-    }
-//
-    public static func setUiContextHanlder(uiContextHanlder: UIView?){
-        if TaskENV.uiContextHanlderArr == nil {
-            TaskENV.uiContextHanlderArr = WeakArray<UIView>()
-        }
-        TaskENV.uiContextHanlderArr!.append( uiContextHanlder)
-    }
-
-    public static func setTaskEnvironment(env : TaskEnvironment){
-        TaskENV.env = env
-    }
-
-    public static func stopPageView(){
-        if TaskSDK.countDownView != nil {
-            TaskSDK.countDownView!.dismissCountdownView()
-            TaskSDK.countDownView = nil
-        }
+    @objc func setGoBrowsCallback(completion: @escaping (( [AnyHashable : Any] ) -> Void)){
+//        let callback = parameter["callback"]
+        self.goBrowsCallBack = completion
         
-        if TaskSDK.taskShareView != nil {
-            TaskSDK.taskShareView!.dismissTaskShare()
-            TaskSDK.taskShareView = nil
-        }
-
-
-        if TaskSDK.taskListView != nil {
-            TaskSDK.taskListView!.dismissTaskList()
-            TaskSDK.taskListView = nil
-        }
     }
     
-    public static func showTaskList(){
-        if  TaskSDK.getUiContextFunc() != nil {
+    
+    
+    public func setToken(token:String){
+        self.token = token
+    }
+    
+    public func setBrand(brand:String){
+        self.brand = brand
+    }
+    
+    public func setChannel(channel:String){
+        self.channel = channel
+    }
+    
+    public func setSite(site:String){
+        self.site = site
+    }
+    
+    public func setTerminal(terminal:String){
+        self.terminal = terminal
+    }
+    
+    public func setLang(lang:String){
+        self.lang = lang
+    }
+    
+    public func setActivityId(activityId:String){
+        self.activityId = activityId
+    }
+    
+    public func setUiContextHanlder(uiContextHanlder: UIView){
+        self.uiContextHanlder = uiContextHanlder
+    }
+    
+    public func setTaskEnvironment(env : TaskEnvironment){
+        self.env = env
+    }
+
+
+    public func stopPageView(){
+        if self.countDownView != nil {
+            self.countDownView!.dismissCountdownView()
+            self.countDownView = nil
+        }
+        
+        if self.taskListView != nil {
+            self.taskListView!.dismissTaskList()
+            self.taskListView = nil
+        }
+        
+        if self.taskShareView != nil {
+            self.taskShareView!.dismissTaskShare()
+            self.taskShareView = nil
+        }
+        
+        if self.uiContextHanlder != nil {
+            self.uiContextHanlder!.removeFromSuperview()
+            self.uiContextHanlder = nil
+            
+        }
+//        closeCountdownView();
+    }
+    
+    public func showTaskList(){
+        if self.clickListFlag {
+            
+            return
+        }
+       
+        self.clickListFlag = true
+        if self.uiContextHanlder != nil {
             //得到当前用户所有的任务
             
             let query: TaskListParam = TaskListParam()
             
-            query.token = TaskENV.token
+            query.token = self.token
             
-            if !TaskENV.brand.isEmpty {
-                query.brandId = TaskENV.brand
+            if !self.brand.isEmpty {
+                query.brandId = self.brand
             }
-            if !TaskENV.channel.isEmpty {
-                query.channelId = TaskENV.channel
+            if !self.channel.isEmpty {
+                query.channelId = self.channel
             }
-            if !TaskENV.site.isEmpty {
-                query.siteId = TaskENV.site
+            if !self.site.isEmpty {
+                query.siteId = self.site
             }
-            if !TaskENV.terminal.isEmpty {
-                query.terminalId = TaskENV.terminal
+            if !self.terminal.isEmpty {
+                query.terminalId = self.terminal
             }
-            if !TaskENV.lang.isEmpty {
-                query.appLangCode = TaskENV.lang
+            if !self.lang.isEmpty {
+                query.appLangCode = self.lang
             }
             
-            if !TaskENV.activityId.isEmpty {
-                query.activityId = TaskENV.activityId
+            if !self.activityId.isEmpty {
+                query.activityId = self.activityId
             }
             
 //        brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, lang: self.lang
-            TaskVM().getTaksList(env:TaskENV.env,token: TaskENV.token, params: query) { taskList in
+            
+            taskVm.getTaksList(env:self.env,token: self.token, params: query) { taskList in
 
-               
-                if taskList != nil && taskList!.count > 0  && TaskSDK.getUiContextFunc() != nil{
+                
+                if taskList != nil && taskList!.count > 0 {
                     
-                    if TaskSDK.taskListView != nil {
-                        TaskSDK.taskListView!.dismissTaskList()
-                        TaskSDK.taskListView = nil
+                    if self.taskListView != nil {
+                        self.taskListView!.dismissTaskList()
+                        self.taskListView = nil
                     }
-                    
-                    
 //                    print(taskList)
 //                    if self.taskListView == nil {
-                    TaskSDK.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                    self.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                         
-                    TaskSDK.taskListView!.initView()
+                    self.taskListView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,callbackFunc:self.goBrowsCallBack!)
 //                    }
                     
-                    TaskSDK.taskListView!.setListData(taskList: taskList!)
-                    TaskSDK.taskListView!.showView { flag in
-//                        self.clickListFlag = false
+                    self.taskListView!.setListData(taskList: taskList!)
+                    self.taskListView!.showView { flag in
+                        self.clickListFlag = false
                     }
-                   
                 }
                 
             }
@@ -166,123 +207,110 @@ public class TaskSDK : NSObject {
 
     }
 
-    public static func closeTaskList(){
-        if TaskSDK.taskListView != nil {
-            TaskSDK.taskListView!.dismissTaskList()
-            TaskSDK.taskListView = nil
-        }
-    }
-    
-    public static func showShareView(taskId:Int){
-        if TaskSDK.getUiContextFunc() != nil{
-            
-            if TaskSDK.taskShareView != nil {
-                TaskSDK.taskShareView!.dismissTaskShare()
-                TaskSDK.taskShareView = nil
-            }
-           
-            TaskSDK.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-
-            TaskSDK.taskShareView!.initView(taskId: taskId)
-
-            TaskSDK.taskShareView!.showView()
-        }
-
-    }
-
-
-    public static func closeShareView(){
-
+    public func closeTaskList(){
+        
 //        closeCountdownView();
-        if TaskSDK.taskShareView != nil {
-            TaskSDK.taskShareView!.dismissTaskShare()
+        if self.taskListView != nil {
+            self.taskListView!.dismissTaskList()
         }
     }
     
-    public static func startPageView(taskId:Int){
-        if TaskSDK.getUiContextFunc() != nil {
+//    public func showShareView(){
+//        if self.uiContextHanlder != nil {
+//            //得到当前用户所有的任务
+////            taskVm.getTaksList(userId: self.userId, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, lang: self.lang) { taskList in
+////
+////                if taskList != nil && taskList!.count > 0 {
+//                    if self.taskShareView == nil {
+//                        self.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+//
+//                        self.taskShareView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang)
+//                    }
+//
+////                    self.taskListView!.setListData(taskList: taskList!)
+//
+//                    self.taskShareView!.showView()
+////                }
+////
+////            }
+//        }
+//
+//    }
+//
+//
+//    public func closeShareView(){
+//
+////        closeCountdownView();
+//        if self.taskShareView != nil {
+//            self.taskShareView?.dismissTaskShare()
+//        }
+//    }
+    
+    
+    public func startPageView(taskId:Int){
+        if self.uiContextHanlder != nil {
             let query: TaskPageViewParam = TaskPageViewParam()
-            query.token = TaskENV.token
-            if !TaskENV.brand.isEmpty{
-                query.brandId = TaskENV.brand
+            query.token = self.token
+            if !self.brand.isEmpty{
+                query.brandId = self.brand
             }
-            if !TaskENV.channel.isEmpty{
-                query.channelId = TaskENV.channel
+            if !self.channel.isEmpty{
+                query.channelId = self.channel
             }
-            if !TaskENV.site.isEmpty {
-                query.siteId = TaskENV.site
+            if !self.site.isEmpty {
+                query.siteId = self.site
             }
-            if !TaskENV.terminal.isEmpty {
-                query.terminalId = TaskENV.terminal
+            if !self.terminal.isEmpty {
+                query.terminalId = self.terminal
             }
 
-            if !TaskENV.lang.isEmpty {
-                query.appLangCode = TaskENV.lang
+            if !self.lang.isEmpty {
+                query.appLangCode = self.lang
             }
             if taskId != nil && taskId > 0 {
                 query.taskId  = taskId
-            }
-            TaskVM().startPageViewTask(env:TaskENV.env,token: TaskENV.token, params: query) { info in
-                if info != nil {
-                    //开始浏览任务
-                    
-                    if TaskSDK.countDownView != nil {
-                        TaskSDK.countDownView!.removeFromSuperview()
-                        TaskSDK.countDownView = nil
+                taskVm.startPageViewTask(env:self.env,token: self.token, params: query) { info in
+                    if info != nil {
+                        //开始浏览任务
+                            
+                        self.countDownView = CountdownView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                        self.countDownView!.showView(uiViewController: self.uiContextHanlder!,token: self.token,brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal,lang: self.lang,data:info!,env: self.env,activityId: self.activityId,notifyCallbacdk:self.callbackBlock!)
+                        
+                        
+                        //        showCountdownView();
                     }
-                    
-                    TaskSDK.countDownView = CountdownView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-                    TaskSDK.countDownView!.showView(data: info!)
-                    
-                    
-                    //        showCountdownView();
                 }
             }
+            
         }
     }
     
-    public static func getUiContextFunc() -> UIView?{
-        if TaskENV.uiContextHanlderArr != nil {
-            
-
-            
-            if TaskENV.uiContextHanlderArr!.allObjects().isEmpty {
-                
-                return nil
-            }
-            
-            return TaskENV.uiContextHanlderArr!.allObjects().last
-
-        }
-        return nil
-    }
     
-    
-    public static func startExecuteTask(taskId:Int) {
+    public func startExecuteTask(taskId:Int) {
         
         if taskId > 0 {
             
             let query: TaskInfoParam = TaskInfoParam()
-            query.token = TaskENV.token
+            query.token = self.token
             query.taskId  = taskId
-            if !TaskENV.brand.isEmpty {
-                query.brandId = TaskENV.brand
+            if !self.brand.isEmpty {
+                query.brandId = self.brand
             }
-            if !TaskENV.channel.isEmpty {
-                query.channelId = TaskENV.channel
+            if !self.channel.isEmpty {
+                query.channelId = self.channel
             }
-            if !TaskENV.site.isEmpty {
-                query.siteId = TaskENV.site
+            if !self.site.isEmpty {
+                query.siteId = self.site
             }
-            if !TaskENV.terminal.isEmpty {
-                query.terminalId = TaskENV.terminal
+            if !self.terminal.isEmpty {
+                query.terminalId = self.terminal
             }
-            if !TaskENV.lang.isEmpty {
-                query.appLangCode = TaskENV.lang
+            if !self.lang.isEmpty {
+                query.appLangCode = self.lang
             }
            
             
-            TaskVM().getTaskInfo(env:TaskENV.env,token: TaskENV.token, params: query, callback: { taskInfoVo in
+            self.taskVm.getTaskInfo(env:self.env,token: self.token, params: query, callback: { taskInfoVo in
                 if taskInfoVo != nil {
                     
                     let type = taskInfoVo!.targetType
@@ -290,20 +318,20 @@ public class TaskSDK : NSObject {
                     if type == TaskType.PAGE_VIEW {
                         //浏览
                         let taskInfo:TaskInfoVO = TaskInfoVO()
-                        var taskPageViewParam: [AnyHashable : Any] = ["taskId" : taskId, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : taskInfo.targetAppUrl, "activityId": TaskENV.activityId]
+                        var taskPageViewParam: [AnyHashable : Any] = ["taskId" : taskId, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : taskInfo.targetAppUrl, "activityId": self.activityId]
                         //发送通知
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam)
                     }else if type == TaskType.SHARE {
                         //分享
-                        if TaskSDK.getUiContextFunc() != nil {
-                            if TaskSDK.taskShareView != nil {
-                                TaskSDK.taskShareView!.dismissTaskShare()
-                                TaskSDK.taskShareView = nil
+                        if self.uiContextHanlder != nil {
+                            if self.taskShareView != nil {
+                                self.taskShareView!.dismissTaskShare()
+                                self.taskShareView = nil
                             }
-                            TaskSDK.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+                            self.taskShareView = TaskShareView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                             
-                            TaskSDK.taskShareView!.initView(taskId: taskId)
-                            TaskSDK.taskShareView!.showView()
+                            self.taskShareView!.initView(uiViewController: self.uiContextHanlder!, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId: self.activityId,taskId: taskId,env: self.env)
+                            self.taskShareView!.showView()
                         }
 
                     }
