@@ -56,16 +56,20 @@ public class TaskSDK : NSObject {
 //        return self
 //    }
     
-    public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String) -> TaskSDK{
-        self.token = token
+    
+    
+    @objc init(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String) {
+       super.init()
+       self.token = token
         self.brand = brand
         self.channel = channel
         self.site = site
         self.terminal = terminal
         self.lang = lang
         self.activityId = activityId
-        return self
     }
+    
+  
     
     // 接收OC传递的Block,调用并回传数据
     public func setGetRewardCallBack(completion : @escaping ((String) -> Void)) {
