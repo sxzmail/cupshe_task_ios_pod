@@ -329,9 +329,18 @@ public class TaskSDK : NSObject {
                     if type == TaskType.PAGE_VIEW {
                         //浏览
                         let taskInfo:TaskInfoVO = TaskInfoVO()
+                        
                         var taskPageViewParam: [AnyHashable : Any] = ["taskId" : taskId, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : taskInfo.targetAppUrl, "activityId": self.activityId]
                         //发送通知
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam)
+                      
+                        if self.goBrowsCallBack != nil {
+                            self.goBrowsCallBack!(taskPageViewParam)
+                        }
+//
+//
+//
+//                        //发送通知
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notify_taskPageView"), object: nil, userInfo:taskPageViewParam)
                     }else if type == TaskType.SHARE {
                         //分享
                        
