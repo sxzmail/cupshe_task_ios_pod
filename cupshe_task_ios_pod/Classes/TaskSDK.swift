@@ -328,9 +328,9 @@ public class TaskSDK : NSObject {
                     
                     if type == TaskType.PAGE_VIEW {
                         //浏览
-                        let taskInfo:TaskInfoVO = TaskInfoVO()
+                    
                         
-                        var taskPageViewParam: [AnyHashable : Any] = ["taskId" : taskId, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : taskInfo.targetAppUrl, "activityId": self.activityId]
+                        var taskPageViewParam: [AnyHashable : Any] = ["taskId" : taskId, "type": TaskType.PAGE_VIEW, "jumpPageUrl" : taskInfoVo!.targetAppUrl, "activityId": self.activityId]
                         //发送通知
                       
                         if self.goBrowsCallBack != nil {
