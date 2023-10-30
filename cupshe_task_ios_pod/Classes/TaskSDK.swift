@@ -43,18 +43,18 @@ public class TaskSDK : NSObject {
     
     
     
-    public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIView) -> TaskSDK{
-        
-        self.token = token
-        self.brand = brand
-        self.channel = channel
-        self.site = site
-        self.terminal = terminal
-        self.lang = lang
-        self.uiContextHanlder = uiContextHanlder
-        self.activityId = activityId
-        return self
-    }
+//    public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIView) -> TaskSDK{
+//
+//        self.token = token
+//        self.brand = brand
+//        self.channel = channel
+//        self.site = site
+//        self.terminal = terminal
+//        self.lang = lang
+//        self.uiContextHanlder = uiContextHanlder
+//        self.activityId = activityId
+//        return self
+//    }
     
     public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String) -> TaskSDK{
         self.token = token
@@ -68,14 +68,14 @@ public class TaskSDK : NSObject {
     }
     
     // 接收OC传递的Block,调用并回传数据
-    @objc func setGetRewardCallBack(completion : @escaping ((String) -> Void)) {
+    public func setGetRewardCallBack(completion : @escaping ((String) -> Void)) {
 //        let callback = parameter["callback"]
         self.callbackBlock = completion;
 //        self.callbackBlock = parameter["callback"] as! AnyObject
         
     }
     
-    @objc func setGoBrowsCallback(completion: @escaping (( [AnyHashable : Any] ) -> Void)){
+    public func setGoBrowsCallback(completion: @escaping (( [AnyHashable : Any] ) -> Void)){
 //        let callback = parameter["callback"]
         self.goBrowsCallBack = completion
         
