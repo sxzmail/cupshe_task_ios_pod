@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'cupshe_task_ios_pod'
-  s.version          = '0.3.1'
+  s.version          = '0.3.2'
   s.summary          = 'cupshe_task_ios_pod.'
 
 # This description is used to generate tags and improve search results.
