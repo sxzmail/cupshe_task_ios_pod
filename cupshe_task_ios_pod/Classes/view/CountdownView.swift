@@ -280,9 +280,8 @@ class CountdownView : UIView{
                             //完成任务
                             //设置结束图
                             if self.browseIcon != nil && self.taskPageViewData != nil {
-                                DispatchQueue.main.async {
-                                    self.browseIcon!.setBackgroundImage(self.endImg!, for: .normal)
-                                }
+                               
+                                self.browseIcon!.setBackgroundImage(self.endImg!, for: .normal)
                                 
                             }
                             
@@ -293,10 +292,10 @@ class CountdownView : UIView{
                                 
                                 UIView.animate(withDuration: 5, animations: {
                                     if self.countDownTipsView != nil && self.tipsTriangle != nil {
-                                        DispatchQueue.main.async {
-                                            self.countDownTipsView!.alpha = 0
-                                            self.tipsTriangle!.alpha = 0
-                                        }
+                                        
+                                        self.countDownTipsView!.alpha = 0
+                                        self.tipsTriangle!.alpha = 0
+                                        
                                     }
                                     
                                 })
@@ -304,13 +303,13 @@ class CountdownView : UIView{
                             
                             
                             if self.countDownLbl != nil && self.browseIcon != nil {
-                                DispatchQueue.main.async {
-                                    self.countDownLbl!.userTaskId = userTaskProgressId
-                                    self.browseIcon!.userTaskId = userTaskProgressId
-                                    self.countDownLbl!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
-                                    self.browseIcon!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
+                                
+                                self.countDownLbl!.userTaskId = userTaskProgressId
+                                self.browseIcon!.userTaskId = userTaskProgressId
+                                self.countDownLbl!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
+                                self.browseIcon!.addTarget(self, action: #selector(self.doGetGift), for:.touchUpInside)
                                     
-                                }
+                                
                             }
                             
                         }
@@ -344,7 +343,10 @@ class CountdownView : UIView{
         if(self.notifyCallback != nil && self.env != nil){
             var userTaskId = sender.userTaskId! as Int
             //  OC的Block - >Swift的闭包,closure就是Block转化后的闭包
-            let jumpUrl = ApiConfig.getRedirectUrl(env: self.env!) + "&userTaskId=" + String(userTaskId);
+            var jumpUrl = ApiConfig.getRedirectUrl(env: self.env!) + "&userTaskId=" + String(userTaskId);
+            if self.env != TaskEnvironment.PRODUCTION {
+                jumpUrl = jumpUrl + "&stage=2"
+            }
             if self.notifyCallback != nil {
                 notifyCallback!(jumpUrl)
             }
