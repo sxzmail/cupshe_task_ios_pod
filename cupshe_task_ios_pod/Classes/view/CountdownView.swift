@@ -344,9 +344,9 @@ class CountdownView : UIView{
             var userTaskId = sender.userTaskId! as Int
             //  OC的Block - >Swift的闭包,closure就是Block转化后的闭包
             var jumpUrl = ApiConfig.getRedirectUrl(env: self.env!) + "&userTaskId=" + String(userTaskId);
-            if self.env != TaskEnvironment.PRODUCTION {
-                jumpUrl = jumpUrl + "&stage=2"
-            }
+//            if self.env != TaskEnvironment.PRODUCTION {
+//                jumpUrl = jumpUrl + "&stage=2"
+//            }
             if self.notifyCallback != nil {
                 notifyCallback!(jumpUrl)
             }
