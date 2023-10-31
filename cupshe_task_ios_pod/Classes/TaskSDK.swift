@@ -43,6 +43,7 @@ public class TaskSDK : NSObject {
     
     private var clickListFlag: Bool = false
     
+    private var refreshPageCallBack:((Bool) -> Void)?
     
     
 //    public func initSdk(token:String,brand:String,channel:String,site:String,terminal:String,lang:String,activityId:String,uiContextHanlder: UIView) -> TaskSDK{
@@ -93,7 +94,9 @@ public class TaskSDK : NSObject {
         
     }
     
-    
+    public func setRefreshPage(completion: @escaping ((Bool) -> Void)){
+        self.refreshPageCallBack = completion
+    }
     
     public func setToken(token:String){
         self.token = token
@@ -204,7 +207,7 @@ public class TaskSDK : NSObject {
 //                    if self.taskListView == nil {
                 self.taskListView = TaskListView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
                     
-                self.taskListView!.initView(uiViewController: uiContextHanlder, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,callbackFunc:self.goBrowsCallBack!,shareCallBackFunc:self.shareCallBack!)
+                self.taskListView!.initView(uiViewController: uiContextHanlder, brand: self.brand, channel: self.channel, site: self.site, terminal: self.terminal, token: self.token,lang: self.lang,activityId:self.activityId,env: self.env,callbackFunc:self.goBrowsCallBack!,shareCallBackFunc:self.shareCallBack!,refreshPageCallbackFunc: self.refreshPageCallBack!)
 //                    }
                 
                 self.taskListView!.setListData(taskList: taskList!)

@@ -64,6 +64,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
     
     private var callback:(( [AnyHashable : Any]) -> Void)?
     private var shareCallBack:(( [AnyHashable : Any]) -> Void)?
+    private var refreshPageCallback:((Bool) -> Void)?
     
     private var opFlag:Bool = false
     
@@ -78,7 +79,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.mediumPath = fontManager.getMediumFontPath(for: TaskListView.self)
         self.regularPath = fontManager.getrRegularFontPath(for: TaskListView.self)
     }
-    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,callbackFunc:(( [AnyHashable : Any]) -> Void)?,shareCallBackFunc:(( [AnyHashable : Any]) -> Void)?){
+    public func initView(uiViewController: UIView,brand:String,channel:String,site:String,terminal:String,token:String,lang: String,activityId:String,env:TaskEnvironment,callbackFunc:(( [AnyHashable : Any]) -> Void)?,shareCallBackFunc:(( [AnyHashable : Any]) -> Void)?,refreshPageCallbackFunc:((Bool) -> Void)?){
         self.brand = brand
         self.channel = channel
         self.site = site
@@ -90,6 +91,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.env = env
         self.callback = callbackFunc
         self.shareCallBack = shareCallBackFunc
+        self.refreshPageCallback = refreshPageCallbackFunc
         
         widthPercent = 1.0 //screenWidth / ScreenConfig.baseWidth
         heightPercent = 1.0 //screenHeight / ScreenConfig.baseHeight
@@ -100,7 +102,8 @@ class TaskListView : UIView ,UIScrollViewDelegate{
         self.taskMaskView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         self.taskMaskView.backgroundColor = .black
         self.taskMaskView.alpha = 0.5
-        self.taskMaskView.addGestureRecognizer(UIGestureRecognizer.init(target: self, action: #selector(dismissTaskList)))
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(dismissTaskList))
+        self.taskMaskView.addGestureRecognizer(tap)
         self.addSubview(self.taskMaskView)
         
         self.popContentView = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: screenHeight * 0.5))
@@ -200,20 +203,20 @@ class TaskListView : UIView ,UIScrollViewDelegate{
 
 
 
-                var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: 70 , y: CGFloat(5 * heightPercent), width: 6.06 * widthPercent, height: 19 * heightPercent))
-                polygonUIView.backgroundColor = .white
+                var polygonUIView:TipsUIView = TipsUIView(frame: CGRect(x: (screenWidth - 32) - CGFloat(80 * widthPercent) * 0.5, y: CGFloat(30 * heightPercent), width: 6.06 * widthPercent, height: 4.25 * heightPercent))
+//                polygonUIView.backgroundColor = .white
                 if taskInfo.targetType == TaskType.CHECK_IN {
                     polygonUIView.code = "UIView_taskId_" + String(taskInfo.taskId)
                 }
 
                 polygonUIView.alpha = 0
 
-                var polygon_img:UIImageView = UIImageView(frame: CGRect(x: 0, y: (19 - 4.25) * heightPercent * 0.5, width: CGFloat(6.06 * widthPercent), height: CGFloat(4.25 * widthPercent)))
-                polygon_img.image = sdkManager.sdk_img(named: "polygon")
+                var polygon_img:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: CGFloat(6.06 * widthPercent), height: CGFloat( 4.25 * widthPercent)))
+                polygon_img.image = SdkManager().sdk_img(named: "polygonup")
 
                 polygonUIView.addSubview(polygon_img)
 
-                var tipsUIView:TipsUIView = TipsUIView(frame: CGRect(x: 70 + CGFloat(6.06 * widthPercent), y: CGFloat(5 * heightPercent), width: 74 * widthPercent, height: 19 * heightPercent))
+                var tipsUIView:TipsUIView = TipsUIView(frame: CGRect(x: (screenWidth - 32) - CGFloat(80 * widthPercent), y: CGFloat(35 * heightPercent), width: 80 * widthPercent, height: 19 * heightPercent))
                 tipsUIView.backgroundColor = tips_color
                 tipsUIView.layer.cornerRadius = 2
                 tipsUIView.layer.shadowRadius = 2
@@ -222,7 +225,7 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 }
                 tipsUIView.alpha = 0
 
-                var tipsLbl:TipsUILabel = TipsUILabel(frame: CGRect(x: 0,y: 0, width: 74 * heightPercent, height: 19 * heightPercent))
+                var tipsLbl:TipsUILabel = TipsUILabel(frame: CGRect(x: 0,y: 0, width: 80 * heightPercent, height: 19 * heightPercent))
                 tipsLbl.text = "Chances +1"
                 tipsLbl.textAlignment = .center
                 tipsLbl.textColor = .white
@@ -357,6 +360,9 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                     if userTaskProgressInfo.status == 2 || userTaskProgressInfo.status == 3 {
                         sender.backgroundColor = self.taskBtn_finish_color
                         sender.removeTarget(self, action: nil, for:.touchUpInside)
+                        if self.refreshPageCallback != nil {
+                            self.refreshPageCallback!(true)
+                        }
                     }
                 }
                 
