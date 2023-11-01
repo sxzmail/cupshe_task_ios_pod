@@ -189,7 +189,14 @@ class TaskListView : UIView ,UIScrollViewDelegate{
                 
                 
                 var col_icon:UIImageView = UIImageView(frame: CGRect(x: 0, y: CGFloat(14 * heightPercent), width: CGFloat(32 * widthPercent), height: CGFloat(32 * heightPercent)))
-                col_icon.image = sdkManager.sdk_img(named: "progress")
+                if taskInfo.targetType == TaskType.CHECK_IN {
+                    col_icon.image = sdkManager.sdk_img(named: "signin")
+                }else if taskInfo.targetType == TaskType.PAGE_VIEW {
+                    col_icon.image = sdkManager.sdk_img(named: "progress")
+                }else if taskInfo.targetType == TaskType.SHARE {
+                    col_icon.image = sdkManager.sdk_img(named: "share")
+                }
+                
 
                 var col_title:UILabel = UILabel(frame: CGRect(x: CGFloat(40 * widthPercent), y: CGFloat(5 * heightPercent), width: (screenWidth - 32 ) - CGFloat(40 * widthPercent) - CGFloat(80 * widthPercent), height: 24 * heightPercent ))
                 if taskInfo.finishCountLimit > 1 {
